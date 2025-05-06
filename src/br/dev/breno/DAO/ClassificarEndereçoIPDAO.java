@@ -1,5 +1,5 @@
 package br.dev.breno.DAO;
 
-public class ClassificarEndereçoIPDAO {
+public class ClassificarEndereÃ§oIPDAO {
 
 }

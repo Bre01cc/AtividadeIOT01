@@ -1,19 +1,19 @@
 package br.dev.breno;
 
-import br.dev.breno.model.ClassificarEnderçoIP;
+import br.dev.breno.model.ClassificarEnderÃ§oIP;
 
 public class Main {
 
 	public static void main(String[] args) {
 	
-		ClassificarEnderçoIP ipInfo = new ClassificarEnderçoIP();
+		ClassificarEnderÃ§oIP ipInfo = new ClassificarEnderÃ§oIP();
 
-		ipInfo.setIp("192.168.0.1");           // Define o IP
-		ipInfo.setCidr(24);                    // Define o CIDR
-		ipInfo.processarPrimeiroOcteto();      // PROCESSA O PRIMEIRO OCTETO
-		ipInfo.classificarIp();                // Classifica com base no octeto
-		ipInfo.ipParaHost();                   // Calcula IPs disponíveis
-		ipInfo.mostrarDados();                 // Exibe tudo
+		ipInfo.setIp("193,168,0,1,0/32"); 
+		ipInfo.setCidr(24); 
+		ipInfo.getPrimeiroOcteto();
+		ipInfo.getCidr();
+		ipInfo.classificarCIDR();
+		ipInfo.mostrarDados();                
 
 	}
 

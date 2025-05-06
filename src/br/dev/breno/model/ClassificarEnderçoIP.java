@@ -1,6 +1,6 @@
 package br.dev.breno.model;
 
-public class ClassificarEnderçoIP {
+public class ClassificarEnderÃ§oIP {
 	private String ip;
 	private int cidr;
 	private int primeiroOcteto;
@@ -9,56 +9,104 @@ public class ClassificarEnderçoIP {
 	private String mascaraBinaria;
 	private String ipClass;
 	
-	
-	
+	public int getPrimeiroOcteto() {
+		return primeiroOcteto;
+	}
+
+
+	public void setPrimeiroOcteto(int primeiroOcteto) {
+		this.primeiroOcteto = primeiroOcteto;
+	}
+
+
+	public String getIp() {
+		return ip;
+	}
+
 
 	public void setIp(String ip) {
 		this.ip = ip;
-		String[]partes = ip.split("/");
-
 	}
 
 
-	public void ipParaHost() {
-		ipDisponiveis = (int) Math.pow(2, 32 - cidr) - 2;
+	public int getCidr() {
+		return cidr;
 	}
 
 
+	public void setCidr(int cidr) {
+		this.cidr = cidr;
+	}
+	public void SeparadorDeIP() {
+		String ipSeparacao = ip.replace(',', '.');
+		String[] partes = ipSeparacao.split("\\.");
+    
+		double  ipDouble =  Double.parseDouble(partes[0]);
+		 primeiroOcteto =  (int) ipDouble;
+		 
+		 // Essa parte para pegar o cidr do ip.O bagulho tÃ¡ confuso, no entanto parece funcionar
+		 String parteCidr = partes[4];
+
+		 String[] partes2= parteCidr.split("/");
+		 double cirPartesDouble = Double.parseDouble(partes2[1]);
+		 cidr =  (int) cirPartesDouble;
+		 
+//		 ipDouble =  Double.parseDouble(partes[4]);
+//		 cidr = (int) ipDouble;
+		}
+		
+	
 	public void classificarIp() {
 		if (primeiroOcteto >= 1 && primeiroOcteto <= 126) {
 		    ipClass = "A";
-		    mascaraDecimal = "255.0.0.0";
-		    mascaraBinaria = "11111111.00000000.00000000.00000000";
-		} else if (primeiroOcteto >= 128 && primeiroOcteto <= 191) {
+		} else if (primeiroOcteto >= 127 && primeiroOcteto <= 191) {
 		    ipClass = "B";
-		    mascaraDecimal = "255.255.0.0";
-		    mascaraBinaria = "11111111.11111111.00000000.00000000";
 		} else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
 		    ipClass = "C";
-		    mascaraDecimal = "255.255.255.0";
-		    mascaraBinaria = "11111111.11111111.11111111.00000000";
 		} else if (primeiroOcteto >= 224 && primeiroOcteto <= 239) {
 		    ipClass = "D (Multicast)";
-		    mascaraDecimal = "";
-		    mascaraBinaria = "";
 		} else {
-			System.out.println("Inválido");
+			System.out.println("Invalido");
 			
-		}
+		}	
 		
 		}
+		
+	//Provalvemente essa parte vai ser bem diferente e possivelmente serÃ¡ outra classe
+		public void classificarCIDR() {
+			switch (cidr) {
+			case 8:
+				mascaraDecimal = "255.0.0.0";				
+				break;
+			case 16:
+				mascaraDecimal = "255.255.0.0";				
+				break;
+			case 24:
+				mascaraDecimal = "255.255.255.0";				
+				break;
+			case 32:
+				mascaraDecimal = "255.255.255.255";				
+				break;
+
+			default:
+				System.out.println("Erro");
+				break;
+			}
+			}
+		
 
 
 	public void mostrarDados() {
+		SeparadorDeIP();
+	    classificarIp();
+	    classificarCIDR();
 		System.out.println("===============================================");
 		System.out.println("Seu ip: " + ip);
-		System.out.println("Seu IP é da classe:" + ipClass);
-		System.out.println("Sua máscara padrão:" + mascaraDecimal);
-		System.out.println("A máscara no padrão binario:" + mascaraBinaria);
+		System.out.println("Sua classe de ip:"+ ipClass);
+		System.out.println("Sua mÃ¡scara padrÃ£o:" + mascaraDecimal);
+		System.out.println("A mÃ¡scara no padrÃ£o binario:" + mascaraBinaria);
 		System.out.println();
 		System.out.println("================================================");
-		System.out.println("");
-		System.out.println("Continuar ou Sair");
 	}
 
 }
