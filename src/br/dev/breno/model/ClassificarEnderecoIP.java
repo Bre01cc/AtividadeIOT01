@@ -1,115 +1,155 @@
 package br.dev.breno.model;
 
 public class ClassificarEnderecoIP {
-	
-		private String ip;
-		private int cidr;
-		private int primeiroOcteto;
-		private int ipDisponiveis;
-		private String mascaraDecimal;
-		private String mascaraBinaria;
-		private String ipClass;
-		
-		public int getPrimeiroOcteto() {
-			return primeiroOcteto;
-		}
 
+	// Atributos da Classe
+	private String ip;
+	private int primeiroOcteto;
+	private int cidr;
+	private String mascaraDecimal;
+	private String mascaraBinario;
+	private int ipDisponiveis;
+	private String ipClass;
 
-		public void setPrimeiroOcteto(int primeiroOcteto) {
-			this.primeiroOcteto = primeiroOcteto;
-		}
+	// Gets e Sets
 
+	// IP
+	public String getIp() {
+		return ip;
+	}
 
-		public String getIp() {
-			return ip;
-		}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
+	// PRIMEIRO OCTETO
+	public int getPrimeiroOcteto() {
+		return primeiroOcteto;
+	}
 
-		public void setIp(String ip) {
-			this.ip = ip;
-		}
+	public void setPrimeiroOcteto(int primeiroOcteto) {
+		this.primeiroOcteto = primeiroOcteto;
+	}
 
+	// CIDR
+	public int getCidr() {
+		return cidr;
+	}
 
-		public int getCidr() {
-			return cidr;
-		}
+	public void setCidr(int cidr) {
+		this.cidr = cidr;
+	}
 
-		public void setCidr(int cidr) {
-			this.cidr = cidr;
-		}
-		public void SeparadorDeIP() {
-			String ipSeparacao = ip.replace(',', '.');
-			String[] partes = ipSeparacao.split("\\.");
-	    
-			double  ipDouble =  Double.parseDouble(partes[0]);
-			 primeiroOcteto =  (int) ipDouble;
+	// MÁSCARA DECIMAL
 
-			 // Essa parte para pegar o cidr do ip.O bagulho tá confuso, no entanto parece funcionar
-			 String parteCidr = partes[4];
+	public String getMascaraDecimal() {
+		return mascaraDecimal;
+	}
 
-			 String[] partes2= parteCidr.split("/");
-			 int cirPartesInt =Integer.parseInt(partes2[1].replaceAll("[^\\d]", ""));
-			 cidr =  cirPartesInt;
+	public void setMascaraDecimal(String mascaraDecimal) {
+		this.mascaraDecimal = mascaraDecimal;
+	}
 
-			 
-//			 ipDouble =  Double.parseDouble(partes[4]);
-//			 cidr = (int) ipDouble;
-			}
-			
-		
-		public void classificarIp() {
-			if (primeiroOcteto >= 1 && primeiroOcteto <= 126) {
-			    ipClass = "A";
-			} else if (primeiroOcteto >= 127 && primeiroOcteto <= 191) {
-			    ipClass = "B";
-			} else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
-			    ipClass = "C";
-			} else if (primeiroOcteto >= 224 && primeiroOcteto <= 239) {
-			    ipClass = "D (Multicast)";
-			} else {
-				System.out.println("Invalido");
-				
-			}	
-			
-			}
-			
-		//Provalvemente essa parte vai ser bem diferente e possivelmente será outra classe
-			public void classificarCIDR() {
-				switch (cidr) {
-				case 8:
-					mascaraDecimal = "255.0.0.0";				
-					break;
-				case 16:
-					mascaraDecimal = "255.255.0.0";				
-					break;
-				case 24:
-					mascaraDecimal = "255.255.255.0";				
-					break;
-				case 32:
-					mascaraDecimal = "255.255.255.255";				
-					break;
+	// MÁSCARA BINARIO
+	public String getMascaraBinario() {
+		return mascaraBinario;
+	}
 
-				default:
-					System.out.println("Erro");
-					break;
-				}
-				}
-			
+	public void setMascaraBinario(String mascaraBinario) {
+		this.mascaraBinario = mascaraBinario;
+	}
 
+	// IP DISPONIVEIS
+	public int getIpDisponiveis() {
+		return ipDisponiveis;
+	}
 
-		public void mostrarDados() {
-			SeparadorDeIP();
-		    classificarIp();
-		    classificarCIDR();
-			System.out.println("===============================================");
-			System.out.println("Seu ip: " + ip);
-			System.out.println("Sua classe de ip:"+ ipClass);
-			System.out.println("Sua máscara padrão:" + mascaraDecimal);
-			System.out.println("A máscara no padrão binario:" + mascaraBinaria);
-			System.out.println();
-			System.out.println("================================================");
+	public void setIpDisponiveis(int ipDisponiveis) {
+		this.ipDisponiveis = ipDisponiveis;
+	}
+
+	// METODOS
+
+	// SEPARAR O IP
+	public void SeparadorDeIPClasse() {
+
+		// pegar o IP e substituir as virgulas por ponto
+		String ipSeparacao = ip.replace(',', '.');
+
+		// Vetor vai receber o IP e separar ele de acordo com os pontos
+		// (No caso o split vai quebrar a String de acordos com os parametros que
+		// inserimos dentro dos parantese)
+		String[] partes = ipSeparacao.split("\\.");
+
+		// Criar uma variavel ipInt que vai receber o vetor 0 e transformar em um int
+		int ipInt = Integer.parseInt(partes[0]);
+
+		// primeiroOcteto vai receber o ipdouble
+		primeiroOcteto = ipInt;
+	}
+
+	public void SeparaIPCidr() {
+		// mesmo processo de separar a String
+		String ipSeparacao = ip.replace(',', '.');
+		String[] partes = ipSeparacao.split("\\.");
+
+		// Nessa etapa eu criei uma variavel String(partesCidr) ele vai associar a
+		// ultima parte do vetor
+		String parteCidr = partes[4];
+
+		// Nessa criei um vetor que vai separar o CDIR em duas partes já que ele estará
+		// assim(0/24).
+		String[] partes1 = parteCidr.split("/");
+
+		// Aqui vai pegar o segunda perte e converte ela em uma variavel int. ("[^\\d]",
+		// "") Essa parte é para tudo que não for digito seja ignorado.
+		// replaceAll é uma forma de substituir dentro do parentese por um padrão
+		// definido
+		int cirPartesInt = Integer.parseInt(partes1[1].replaceAll("[^\\d]", ""));
+
+		// Por fim cidr vai receber esse número
+		cidr = cirPartesInt;
+	}
+
+	// Classificar o IP com base no valor do primeiro octecto utilizando de if e
+	// else if
+	public void classificarIp() {
+		if (primeiroOcteto >= 1 && primeiroOcteto <= 126) {
+			ipClass = "A";
+		} else if (primeiroOcteto >= 127 && primeiroOcteto <= 191) {
+			ipClass = "B";
+		} else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
+			ipClass = "C";
+		} else if (primeiroOcteto >= 224 && primeiroOcteto <= 239) {
+			ipClass = "D";
+		} else {
+			System.out.println("Invalido");
+
 		}
 
 	}
 
+	public void converterBinario() {
+		String bin = Integer.toBinaryString(cidr);
+		String formatacao =String.format("%32", bin).replace(' ', '0');
+		String breakOcteto
+		mascaraBinario = bin;
+	}
+	
 
+		public void mostrarDados() {
+			SeparaIPCidr();
+			SeparadorDeIPClasse();
+		    classificarIp();
+		    converterBinario();
+			System.out.println("===============================================");
+			System.out.println("Seu ip: " + ip);
+			System.out.println("Sua classe de ip:"+ ipClass);
+			System.out.println("Sua máscara padrão:" + mascaraDecimal);
+			System.out.println("A máscara no padrão binario:" + mascaraBinario);
+			System.out.println();
+			System.out.println("================================================");
+		}
+}
+
+//	}
