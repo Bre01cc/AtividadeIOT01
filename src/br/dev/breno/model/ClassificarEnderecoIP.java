@@ -128,28 +128,52 @@ public class ClassificarEnderecoIP {
 		}
 
 	}
-
 	public void converterBinario() {
-		String bin = Integer.toBinaryString(cidr);
-		String formatacao =String.format("%32", bin).replace(' ', '0');
-		String breakOcteto
-		mascaraBinario = bin;
-	}
-	
+					StringBuilder binario = new StringBuilder();
+					// StringBuilder é usado por diversas a razões, por conta de ser
+					// mutavél(conseguir modifica-la de diversas formas)
+					// acaba sendo melhor de ser usada nessa situação.
+		for (int i = 0; i < 32; i++) {
+			// For é usado quando você sabe exatamente a quantidade de vezes que um loop
+			// deve ocorrer. O loop do for não depende de condições externas para acontecer que nem o while
+			// No caso o loop nessa situação deve ocorrer enquanto i for menor 32, pois 32 que é a
+			// quantidade de bits no ipv4.
+			
+			//Criando uma condição que enquanto i for menor que o cidr o seu valor será substituido por 1
+			if (i < cidr)
+				
+				binario.append('1');
+			//É o restante será substituido por 0
+			else
+				binario.append('0');
 
-		public void mostrarDados() {
-			SeparaIPCidr();
-			SeparadorDeIPClasse();
-		    classificarIp();
-		    converterBinario();
-			System.out.println("===============================================");
-			System.out.println("Seu ip: " + ip);
-			System.out.println("Sua classe de ip:"+ ipClass);
-			System.out.println("Sua máscara padrão:" + mascaraDecimal);
-			System.out.println("A máscara no padrão binario:" + mascaraBinario);
-			System.out.println();
-			System.out.println("================================================");
+		
+//			if ((i + 1) % 8 == 0 && i < 31) {
+//				binario.append('.');
+				
+				
+				// Formatação do binario para a cada grupo de 8 bits adicionar um ponto
+				// i<31 é para que no final não seja imprimido um ponto
+			}
+			
+			mascaraBinario = binario.toString();
+			
 		}
+		
+	}
+
+	public void mostrarDados() {
+		SeparaIPCidr();
+		converterBinario();
+		SeparadorDeIPClasse();
+		classificarIp();
+		System.out.println("===============================================");
+		System.out.println("Seu ip: " + ip);
+		System.out.println("Sua classe de ip:" + ipClass);
+		System.out.println("Sua máscara padrão:" + mascaraDecimal);
+		System.out.println("A máscara no padrão binario:" + mascaraBinario);
+		System.out.println("================================================");
+	}
 }
 
 //	}
