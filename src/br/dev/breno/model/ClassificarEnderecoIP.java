@@ -148,8 +148,8 @@ public class ClassificarEnderecoIP {
 				binario.append('0');
 
 		
-//			if ((i + 1) % 8 == 0 && i < 31) {
-//				binario.append('.');
+			if ((i + 1) % 8 == 0 && i < 31) {
+				binario.append('.');
 				
 				
 				// Formatação do binario para a cada grupo de 8 bits adicionar um ponto
@@ -161,6 +161,8 @@ public class ClassificarEnderecoIP {
 		}
 		
 	}
+		
+	
 
 	public void mostrarDados() {
 		SeparaIPCidr();
