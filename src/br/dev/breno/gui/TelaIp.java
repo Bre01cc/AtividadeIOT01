@@ -1,10 +1,12 @@
 package br.dev.breno.gui;
 
+import br.dev.breno.model.ClassificarEnderecoIP;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +25,9 @@ public class TelaIp {
 	private JLabel labelBinario;
 	private JLabel labelDecimal;
 	private JLabel labelHost;
+	private JLabel labelIpDaRede;
+	private JLabel labelPrimeiroIp;
+	private JLabel labelUltimoIp;
 
 	private JLabel labelErro;
 
@@ -30,7 +35,7 @@ public class TelaIp {
 		this.tituloDaTela = tituloDaTela;
 		JFrame tela = new JFrame();
 		tela.setTitle(this.tituloDaTela);
-		tela.setSize(500, 400);
+		tela.setSize(490, 400);
 		tela.setResizable(false);
 		tela.setLayout(null);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,25 +57,25 @@ public class TelaIp {
 
 		// LABEL ClasseIp
 		labelClasseIp = new JLabel();
-		labelClasseIp.setBounds(50, 90, 200, 200);
+		labelClasseIp.setBounds(50, 10, 200, 200);
 		labelClasseIp.setFont(new Font("Arial", 1, 15));
 		labelClasseIp.setVisible(false);
 
 		// LABEL Binario
 		labelBinario = new JLabel();
-		labelBinario.setBounds(50, 70, 400, 200);
-		labelBinario.setFont(new Font("Arial", 1, 13));
+		labelBinario.setBounds(50, 35, 500, 200);
+		labelBinario.setFont(new Font("Arial", 1, 14));
 		labelBinario.setVisible(false);
 
 		// LABEL Decimal
 		labelDecimal = new JLabel();
-		labelDecimal.setBounds(50, 60, 200, 200);
+		labelDecimal.setBounds(50, 60, 300, 200);
 		labelDecimal.setFont(new Font("Arial", 1, 15));
 		labelDecimal.setVisible(false);
 
 		// LABEL Host
 		labelHost = new JLabel();
-		labelHost.setBounds(50, 110, 200, 200);
+		labelHost.setBounds(50, 135, 800, 100);
 		labelHost.setFont(new Font("Arial", 1, 15));
 		labelHost.setVisible(false);
 
@@ -92,6 +97,11 @@ public class TelaIp {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textIpAddres.setText(null);
+				labelClasseIp.setText(null);
+				labelBinario.setText(null);
+				labelDecimal.setText(null);
+				labelHost.setText(null);
+				labelErro.setText(null);
 
 			}
 
@@ -104,33 +114,79 @@ public class TelaIp {
 
 					ClassificarEnderecoIP addIP = new ClassificarEnderecoIP();
 
-					// Classe
 					String caixaText = textIpAddres.getText();
+
 					addIP.setIp(caixaText);
 					String ip = addIP.getIp();
 					addIP.SeparadorDeIPClasse(ip);
-					String classe = addIP.classificarIp();
-					labelClasseIp.setText("Classe do IP: " + classe);
-					labelClasseIp.setVisible(true);
-
-					// Binario
+					int primeiroOcteto = addIP.getPrimeiroOcteto();
 					addIP.SeparaIPCidr(ip);
 					int cidr = addIP.getCidr();
-					addIP.converterBinario(cidr);
-					String binario = addIP.getMascaraBinario();
-					labelBinario.setText("Máscara em binario" + binario);
-					labelBinario.setVisible(true);
 
-					// Decimal
+//					 VERIFICANDO SE O PRIMEIRO OCTETO
+					
+					if(primeiroOcteto <1 || 32) {
+					labelClasseIp.setText("Octeto invalido");
+					}
+						
+					
+					else {
+						
+						addIP.classificarIp(primeiroOcteto);
+						String classe = addIP.getClasseIp();
+						labelClasseIp.setText("Classe do IP: " + classe);
+						labelClasseIp.setVisible(true);
+						labelClasseIp.setForeground(Color.black);
+						labelErro.setVisible(false);
+						if (cidr >= 1 && cidr <= 31) {
+							addIP.converterBinario(cidr);
+							String binario = addIP.getMascaraBinario();
+							labelBinario.setText("Mascara em binario: " + binario);
+							labelBinario.setVisible(true);
+							labelBinario.setForeground(Color.black);
 
-					// Host
+							// Decimal
+							addIP.converterCidrDecimal(binario);
+							String decimal = addIP.getMascaraDecimal();
+							labelDecimal.setText("Mascara decimal: " + decimal);
+							labelBinario.setForeground(Color.black);
+							labelDecimal.setVisible(true);
 
-				
+							// Host
+							addIP.IpHost(cidr);
+							Double host = addIP.getIpDisponiveis();
+							DecimalFormat df = new DecimalFormat("#,###");
+							labelHost.setText("IP disponiveis para host: " + df.format(host));
+							labelHost.setForeground(Color.black);
+							labelHost.setVisible(true);
 
-				} catch (Exception erro) {
+						} 
+						else {
+							
+						}
+						
+						
+						
+
+					if  (cidr < 0 || cidr > 32) {
+							labelBinario.setText("Cidr esta invalido");
+							labelBinario.setForeground(Color.RED);
+							labelHost.setVisible(false);
+							labelDecimal.setVisible(false);
+							labelBinario.setVisible(true);
+					}
+				}
+
+					
+
+				catch (Exception erro) {
+					labelBinario.setVisible(false);
+					labelDecimal.setVisible(false);
+					labelHost.setVisible(false);
+					labelClasseIp.setVisible(false);
 					labelErro.setText("Erro");
 					labelErro.setVisible(true);
-
+					
 				}
 
 			}
