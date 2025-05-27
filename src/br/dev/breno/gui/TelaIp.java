@@ -25,185 +25,186 @@ public class TelaIp {
 	private JLabel labelBinario;
 	private JLabel labelDecimal;
 	private JLabel labelHost;
-	private JLabel labelIpDaRede;
-	private JLabel labelPrimeiroIp;
-	private JLabel labelUltimoIp;
-
 	private JLabel labelErro;
+	private JLabel labelIpOneHost;
+	private JLabel labelIplastHost;
+	private JLabel labelIpRede;
+	private JLabel labelIpBroadcast;
 
 	public void CriarTelaIp(String tituloDaTela) {
 		this.tituloDaTela = tituloDaTela;
+
+		// Configuração da janela principal
 		JFrame tela = new JFrame();
 		tela.setTitle(this.tituloDaTela);
 		tela.setSize(490, 400);
 		tela.setResizable(false);
 		tela.setLayout(null);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		Container container = tela.getContentPane();
 
-		// LABEL DO IP
-		labelIpAddress = new JLabel();
+		// Campo de entrada do IP
+		labelIpAddress = new JLabel("INSIRA O IP");
+		labelIpAddress.setFont(new Font("Arial", Font.BOLD, 14));
 		labelIpAddress.setBounds(50, 20, 100, 20);
-		labelIpAddress.setFont(new Font("Arial", 1, 14));
-		labelIpAddress.setText("INSIRA O IP");
 
-		// LABEL MENSAGEM DE ERRO
-		labelErro = new JLabel();
-		labelErro.setFont(new Font("Arial", 1, 20));
-		labelErro.setForeground(Color.RED);
-		labelErro.setBounds(50, 90, 100, 200);
-		labelErro.setVisible(false);
-
-		// LABEL ClasseIp
-		labelClasseIp = new JLabel();
-		labelClasseIp.setBounds(50, 10, 200, 200);
-		labelClasseIp.setFont(new Font("Arial", 1, 15));
-		labelClasseIp.setVisible(false);
-
-		// LABEL Binario
-		labelBinario = new JLabel();
-		labelBinario.setBounds(50, 35, 500, 200);
-		labelBinario.setFont(new Font("Arial", 1, 14));
-		labelBinario.setVisible(false);
-
-		// LABEL Decimal
-		labelDecimal = new JLabel();
-		labelDecimal.setBounds(50, 60, 300, 200);
-		labelDecimal.setFont(new Font("Arial", 1, 15));
-		labelDecimal.setVisible(false);
-
-		// LABEL Host
-		labelHost = new JLabel();
-		labelHost.setBounds(50, 135, 800, 100);
-		labelHost.setFont(new Font("Arial", 1, 15));
-		labelHost.setVisible(false);
-
-		// CAIXA DE IP
 		textIpAddres = new JTextField();
 		textIpAddres.setBounds(50, 40, 300, 30);
 
-		// Button resultado
-		buttonResultado = new JButton();
-		buttonResultado.setText("Exibir");
+		// Botão "Exibir"
+		buttonResultado = new JButton("Exibir");
 		buttonResultado.setBounds(50, 275, 140, 35);
 
-		// Button limpar
-		buttonLimpar = new JButton();
-		buttonLimpar.setText("Limpar");
+		// Botão "Limpar"
+		buttonLimpar = new JButton("Limpar");
 		buttonLimpar.setBounds(210, 275, 140, 35);
 
+		// Mensagem de erro
+		labelErro = new JLabel();
+		labelErro.setFont(new Font("Arial", Font.BOLD, 20));
+		labelErro.setForeground(Color.RED);
+		labelErro.setBounds(50, 90, 300, 30);
+		labelErro.setVisible(false);
+
+		// Labels de resultado
+		labelClasseIp = new JLabel();
+		labelClasseIp.setFont(new Font("Arial", Font.BOLD, 15));
+		labelClasseIp.setBounds(50, 100, 400, 30);
+		labelClasseIp.setVisible(false);
+
+		labelBinario = new JLabel();
+		labelBinario.setFont(new Font("Arial", Font.BOLD, 14));
+		labelBinario.setBounds(50, 130, 500, 30);
+		labelBinario.setVisible(false);
+
+		labelDecimal = new JLabel();
+		labelDecimal.setFont(new Font("Arial", Font.BOLD, 15));
+		labelDecimal.setBounds(50, 160, 400, 30);
+		labelDecimal.setVisible(false);
+
+		labelHost = new JLabel();
+		labelHost.setFont(new Font("Arial", Font.BOLD, 15));
+		labelHost.setBounds(50, 190, 400, 30);
+		labelHost.setVisible(false);
+
+		// Ação do botão "Limpar"
 		buttonLimpar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				textIpAddres.setText(null);
-				labelClasseIp.setText(null);
-				labelBinario.setText(null);
-				labelDecimal.setText(null);
-				labelHost.setText(null);
-				labelErro.setText(null);
-
+				textIpAddres.setText("");
+				labelClasseIp.setText("");
+				labelBinario.setText("");
+				labelDecimal.setText("");
+				labelHost.setText("");
+				labelErro.setText("");
+				labelErro.setVisible(false);
+				labelClasseIp.setVisible(false);
+				labelBinario.setVisible(false);
+				labelDecimal.setVisible(false);
+				labelHost.setVisible(false);
 			}
-
 		});
 
+		// Ação do botão "Exibir"
 		buttonResultado.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-
 					ClassificarEnderecoIP addIP = new ClassificarEnderecoIP();
-
 					String caixaText = textIpAddres.getText();
 
 					addIP.setIp(caixaText);
 					String ip = addIP.getIp();
+
 					addIP.SeparadorDeIPClasse(ip);
 					int primeiroOcteto = addIP.getPrimeiroOcteto();
+					addIP.classificarIp(primeiroOcteto);
+
 					addIP.SeparaIPCidr(ip);
 					int cidr = addIP.getCidr();
 
-//					 VERIFICANDO SE O PRIMEIRO OCTETO
-					
-					if(primeiroOcteto <1 || 32) {
-					labelClasseIp.setText("Octeto invalido");
-					}
-						
-					
-					else {
-						
-						addIP.classificarIp(primeiroOcteto);
-						String classe = addIP.getClasseIp();
-						labelClasseIp.setText("Classe do IP: " + classe);
+					if (primeiroOcteto < 1 || primeiroOcteto > 255) {
+						labelClasseIp.setText("Verifique se o valor do primeiro octeto é válido");
+						labelClasseIp.setForeground(Color.RED);
 						labelClasseIp.setVisible(true);
-						labelClasseIp.setForeground(Color.black);
+//                        return;
+					} else {
+						labelClasseIp.setText("Classe do IP: " + addIP.getCp());
+						labelClasseIp.setForeground(Color.BLACK);
+						labelClasseIp.setVisible(true);
 						labelErro.setVisible(false);
-						if (cidr >= 1 && cidr <= 31) {
-							addIP.converterBinario(cidr);
-							String binario = addIP.getMascaraBinario();
-							labelBinario.setText("Mascara em binario: " + binario);
-							labelBinario.setVisible(true);
-							labelBinario.setForeground(Color.black);
 
-							// Decimal
-							addIP.converterCidrDecimal(binario);
-							String decimal = addIP.getMascaraDecimal();
-							labelDecimal.setText("Mascara decimal: " + decimal);
-							labelBinario.setForeground(Color.black);
-							labelDecimal.setVisible(true);
+					}
 
-							// Host
+					if (cidr <= 0) {
+						labelBinario.setText("Cidr está inválido");
+						labelBinario.setForeground(Color.RED);
+						labelBinario.setVisible(true);
+						labelDecimal.setVisible(false);
+						labelHost.setVisible(false);
+//                        return;
+					}
+
+					else if (cidr > 32) {
+						labelBinario.setText("Cidr está inválido");
+						labelBinario.setForeground(Color.RED);
+						labelBinario.setVisible(true);
+						labelDecimal.setVisible(false);
+						labelHost.setVisible(false);
+//                        return;
+					} else {
+						// Binário
+						addIP.converterBinario(cidr);
+						String binario = addIP.getMascaraBinario();
+						labelBinario.setText("Máscara em binário: " + binario);
+						labelBinario.setForeground(Color.BLACK);
+						labelBinario.setVisible(true);
+
+						// Decimal
+						addIP.converterCidrDecimal(binario);
+						String decimal = addIP.getMascaraDecimal();
+						labelDecimal.setText("Máscara decimal: " + decimal);
+						labelDecimal.setForeground(Color.BLACK);
+						labelDecimal.setVisible(true);
+
+						// Hosts
+						if (cidr <= 30) {
 							addIP.IpHost(cidr);
 							Double host = addIP.getIpDisponiveis();
 							DecimalFormat df = new DecimalFormat("#,###");
-							labelHost.setText("IP disponiveis para host: " + df.format(host));
-							labelHost.setForeground(Color.black);
+							labelHost.setText("IPs disponíveis para host: " + df.format(host));
+							labelHost.setForeground(Color.BLACK);
 							labelHost.setVisible(true);
-
-						} 
-						else {
-							
+						} else if (cidr >= 31) {
+							labelHost.setText("Ips para host indisponiveis");
+							labelHost.setForeground(Color.red);
+							labelHost.setVisible(true);
 						}
-						
-						
-						
 
-					if  (cidr < 0 || cidr > 32) {
-							labelBinario.setText("Cidr esta invalido");
-							labelBinario.setForeground(Color.RED);
-							labelHost.setVisible(false);
-							labelDecimal.setVisible(false);
-							labelBinario.setVisible(true);
 					}
-				}
 
-					
-
-				catch (Exception erro) {
+				} catch (Exception erro) {
+					labelErro.setText("Erro");
+					labelErro.setVisible(true);
+					labelClasseIp.setVisible(false);
 					labelBinario.setVisible(false);
 					labelDecimal.setVisible(false);
 					labelHost.setVisible(false);
-					labelClasseIp.setVisible(false);
-					labelErro.setText("Erro");
-					labelErro.setVisible(true);
-					
 				}
-
 			}
-
 		});
 
+		// Adicionando componentes ao container
 		container.add(labelIpAddress);
 		container.add(textIpAddres);
+		container.add(buttonResultado);
 		container.add(buttonLimpar);
 		container.add(labelErro);
 		container.add(labelClasseIp);
-		container.add(labelHost);
-		container.add(labelDecimal);
 		container.add(labelBinario);
-		container.add(buttonResultado);
+		container.add(labelDecimal);
+		container.add(labelHost);
 
 		tela.setVisible(true);
 	}
-
 }

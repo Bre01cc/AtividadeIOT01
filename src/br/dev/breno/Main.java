@@ -1,5 +1,7 @@
 package br.dev.breno;
 
+import java.text.DecimalFormat;
+
 import br.dev.breno.gui.TelaIp;
 import br.dev.breno.model.ClassificarEnderecoIP;
 
@@ -19,15 +21,15 @@ public class Main {
 		
 //		int numero= 1010;
 		
-
-//		ClassificarEnderecoIP javaIp1 = new ClassificarEnderecoIP();
-//
-//		javaIp1.setIp("192.168.10.0/1");
-//		javaIp1.mostrarDados();
-		
 		TelaIp tela = new TelaIp();
-		tela.CriarTelaIp("IP");
-		
+		tela.CriarTelaIp("IP");		
 
+		
+		
+		
+		
+		
+		
+		
 	}
 }
