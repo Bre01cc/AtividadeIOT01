@@ -1,5 +1,7 @@
 package br.dev.breno.model;
 
+import java.text.DecimalFormat;
+
 public class ClassificarEnderecoIP {
 
 	// Atributos da Classe
@@ -8,12 +10,10 @@ public class ClassificarEnderecoIP {
 	private int cidr;
 	private String mascaraDecimal;
 	private String mascaraBinario;
-	private int ipDisponiveis;
+	private double ipDisponiveis;
 	private String ipClass;
 
 	// Gets e Sets
-
-	// IP
 	public String getIp() {
 		return ip;
 	}
@@ -60,18 +60,14 @@ public class ClassificarEnderecoIP {
 	}
 
 	// IP DISPONIVEIS
-	public int getIpDisponiveis() {
+	public double getIpDisponiveis() {
 		return ipDisponiveis;
-	}
-
-	public void setIpDisponiveis(int ipDisponiveis) {
-		this.ipDisponiveis = ipDisponiveis;
 	}
 
 	// METODOS
 
 	// SEPARAR O IP
-	public void SeparadorDeIPClasse() {
+	public void SeparadorDeIPClasse(String ip) {
 
 		// pegar o IP e substituir as virgulas por ponto
 		String ipSeparacao = ip.replace(',', '.');
@@ -88,23 +84,21 @@ public class ClassificarEnderecoIP {
 		primeiroOcteto = ipInt;
 	}
 
-	public void SeparaIPCidr() {
-		// mesmo processo de separar a String
+	public void SeparaIPCidr(String ip) {
+		// Substitui vírgulas por pontos no IP, se necessário
 		String ipSeparacao = ip.replace(',', '.');
+
+		// Divide a string do IP em partes, usando o ponto como delimitador
 		String[] partes = ipSeparacao.split("\\.");
 
-		// Nessa etapa eu criei uma variavel String(partesCidr) ele vai associar a
-		// ultima parte do vetor
-		String parteCidr = partes[4];
+		// Obtém a última parte do vetor, que contém o CIDR (ex: "0/24")
+		String parteCidr = partes[3];
 
-		// Nessa criei um vetor que vai separar o CDIR em duas partes já que ele estará
-		// assim(0/24).
+		// Divide a parte do CIDR em duas partes, separadas por "/"
 		String[] partes1 = parteCidr.split("/");
 
-		// Aqui vai pegar o segunda perte e converte ela em uma variavel int. ("[^\\d]",
-		// "") Essa parte é para tudo que não for digito seja ignorado.
-		// replaceAll é uma forma de substituir dentro do parentese por um padrão
-		// definido
+		// Extrai a parte numérica do CIDR (ex: "24") e converte para inteiro
+		// O replaceAll remove tudo que não for dígito
 		int cirPartesInt = Integer.parseInt(partes1[1].replaceAll("[^\\d]", ""));
 
 		// Por fim cidr vai receber esse número
@@ -113,7 +107,7 @@ public class ClassificarEnderecoIP {
 
 	// Classificar o IP com base no valor do primeiro octecto utilizando de if e
 	// else if
-	public void classificarIp() {
+	public String classificarIp() {
 		if (primeiroOcteto >= 1 && primeiroOcteto <= 126) {
 			ipClass = "A";
 		} else if (primeiroOcteto >= 127 && primeiroOcteto <= 191) {
@@ -126,11 +120,12 @@ public class ClassificarEnderecoIP {
 			System.out.println("Invalido");
 
 		}
+		return ipClass;
 
 	}
 
 	// CONVERTENDO PARA BINÁRIO
-	public void converterBinario() {
+	public void converterBinario(int cidr) {
 		StringBuilder binario = new StringBuilder();
 		// StringBuilder é usado por diversas a razões, por conta de ser
 		// mutavél(conseguir modifica-la de diversas formas)
@@ -176,39 +171,78 @@ public class ClassificarEnderecoIP {
 
 	// CONVERTER MÁSCARA DECIMAL
 //	
-	public void converterCidrDecimal() {
-	    StringBuilder decimal = new StringBuilder();
-	    
-	    // Remover os pontos da máscara binária antes de processar
-	    String binarioPontos = mascaraBinario.replace(".", "");
+	public void converterCidrDecimal(String binario) {
+		StringBuilder decimal = new StringBuilder();
 
-	    //um loop que percore os 4 octetos
-	    for (int i = 0; i < 4; i++) {
-	    	//pegando os octetos transformando int
-	    	//significado literal e subcadeia de caracteres
-	        String octetoDecimal = binarioPontos.substring(i * 8, (i + 1) * 8);
-	        decimal.append(Integer.parseInt(octetoDecimal, 2));
-	        
-	        //
-	        if (i < 3)
-	            decimal.append(".");
-	    }
+		// Removendo os pontos da máscara binária
+		String binarioPontos = mascaraBinario.replace(".", "");
 
-	    mascaraDecimal = decimal.toString();
+		// um loop que percore os 4 octetos
+		for (int i = 0; i < 4; i++) {
+			
+			// Criando uma variavel que vai receber a mascará binario sem a separação por
+			// pontos
+			// substring médoto para extrair uma parte da String
+			// No substring estão sendo passados os parametros de inicio e fim
+			if (i == 0) {
+				String octetoDecimal = binarioPontos.substring(0, 8);
+
+				// Objetivo desse trecho é transformar octeto binario para decimal.
+				// A base de um sistema numérico indica quantos dígitos diferentes ele pode
+				// usar(usaremos a base do binario).
+				// 2 é base, pois em binário é usado apenas os números 0 e 1.
+				// No caso o número extraido pelo octetoDecimal está sendo convertido para
+				// decimal,pela base 2(binario).
+				// Integer.parseInt converte uma String para int(número inteiro) ou Converte uma
+				// string de qualquer base para decimal, que nesse caso a base é 2
+				decimal.append(Integer.parseInt(octetoDecimal, 2));
+			} else if (i == 1) {
+				String octetoDecimal = binarioPontos.substring(8, 16);
+				decimal.append(Integer.parseInt(octetoDecimal, 2));
+			}
+			if (i == 2) {
+				String octetoDecimal = binarioPontos.substring(16, 24);
+				decimal.append(Integer.parseInt(octetoDecimal, 2));
+			}
+			if (i == 3) {
+				String octetoDecimal = binarioPontos.substring(24, 32);
+				decimal.append(Integer.parseInt(octetoDecimal, 2));
+			}
+
+			// Adicionar ponto 3 vezes
+			if (i < 3)
+
+				decimal.append(".");
+		}
+
+		mascaraDecimal = decimal.toString();
 	}
 
-//TESTE PARA EXIBIR NO TERMINAL
-	public void mostrarDados() {
-		SeparaIPCidr();
-		converterBinario();
-		converterCidrDecimal();
-		SeparadorDeIPClasse();
-		classificarIp();
-		System.out.println("===============================================");
-		System.out.println("Seu ip: " + ip);
-		System.out.println("Sua classe de ip:" + ipClass);
-		System.out.println("Sua máscara padrão:" + mascaraDecimal);
-		System.out.println("A máscara no padrão binario:" + mascaraBinario);
-		System.out.println("================================================");
+	public void IpHost(int cidr) {
+		// Calculo para ips disponiveis para host
+		ipDisponiveis = Math.pow(2, 32 - cidr) - 2;
 	}
+
+	// Formatação para decimal criada para o ipDisponiveis
+	DecimalFormat df = new DecimalFormat("#,###");
+
+
+//	public String mostrarDados() {
+
+//		SeparaIPCidr(ip);
+//		converterBinario(cidr);
+////		converterCidrDecimal(mascaraBinario);
+//		SeparadorDeIPClasse();
+//		classificarIp();
+//		IpHost(cidr);
+//		System.out.println("===============================================");
+//		System.out.println("Seu ip: " + ip);
+//		System.out.println("Sua classe de ip:" + ipClass);
+//		System.out.println("Sua máscara padrão:" + mascaraDecimal);
+//		System.out.println("A máscara no padrão binario:" + mascaraBinario);
+//		System.out.println("IPs disponíveis: " + df.format(ipDisponiveis));
+//		System.out.println("================================================");
+//		return ip;
+	
+
 }
