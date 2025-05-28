@@ -104,6 +104,14 @@ public class ClassificarEnderecoIP {
 		// um int
 		int ipInt = Integer.parseInt(partes[0]);
 
+		ipRede = partes[0] + "." + partes[1] + "." + partes[2] + "." + "0";
+
+		ipOneHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "1";
+
+		ipLastHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "254";
+
+		ipBroadcast = partes[0] + "." + partes[1] + "." + partes[2] + "." + "255";
+
 		// primeiroOcteto vai receber o ipInt
 		primeiroOcteto = ipInt;
 	}
@@ -230,20 +238,6 @@ public class ClassificarEnderecoIP {
 	public void IpHost(int cidr) {
 		// Cálculo para IPs disponíveis para hosts
 		ipDisponiveis = Math.pow(2, 32 - cidr) - 2;
-	}
-
-	public void InfoIp(String ip) {
-		String ipSeparacao = ip.replace(',', '.');
-		String[] partes = ipSeparacao.split("\\.");
-
-		ipRede = partes[0] + "." + partes[1] + "." + partes[2] + "." + "0";
-		
-		ipOneHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "1";
-		
-		ipLastHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "254";
-		
-		ipBroadcast = partes[0] + "." + partes[1] + "." + partes[2] + "." + "255";
-
 	}
 
 }

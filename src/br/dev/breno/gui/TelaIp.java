@@ -37,7 +37,7 @@ public class TelaIp {
 		// Configuração da janela principal
 		JFrame tela = new JFrame();
 		tela.setTitle(this.tituloDaTela);
-		tela.setSize(490, 400);
+		tela.setSize(570, 440);
 		tela.setResizable(false);
 		tela.setLayout(null);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,18 +46,20 @@ public class TelaIp {
 		// Campo de entrada do IP
 		labelIpAddress = new JLabel("INSIRA O IP");
 		labelIpAddress.setFont(new Font("Arial", Font.BOLD, 14));
-		labelIpAddress.setBounds(50, 20, 100, 20);
+		labelIpAddress.setBounds(50, 10, 100, 20);
 
+		//Campo de entrada de ip
 		textIpAddres = new JTextField();
-		textIpAddres.setBounds(50, 40, 300, 30);
+		textIpAddres.setFont(new Font("Arial", Font.BOLD, 15));
+		textIpAddres.setBounds(50, 30, 400, 30);
 
 		// Botão "Exibir"
 		buttonResultado = new JButton("Exibir");
-		buttonResultado.setBounds(50, 275, 140, 35);
+		buttonResultado.setBounds(80, 350, 160, 35);
 
 		// Botão "Limpar"
 		buttonLimpar = new JButton("Limpar");
-		buttonLimpar.setBounds(210, 275, 140, 35);
+		buttonLimpar.setBounds(260, 350, 160, 35);
 
 		// Mensagem de erro
 		labelErro = new JLabel();
@@ -68,23 +70,48 @@ public class TelaIp {
 
 		// Labels de resultado
 		labelClasseIp = new JLabel();
-		labelClasseIp.setFont(new Font("Arial", Font.BOLD, 15));
-		labelClasseIp.setBounds(50, 100, 400, 30);
+		labelClasseIp.setFont(new Font("Arial", Font.BOLD, 17));
+		labelClasseIp.setBounds(50, 75, 400, 30);
 		labelClasseIp.setVisible(false);
 
+		// Label ip de rede
+		labelIpRede = new JLabel();
+		labelIpRede.setBounds(50, 105, 300, 30);
+		labelIpRede.setFont(new Font("Arial", Font.BOLD, 17));
+		labelIpRede.setVisible(false);
+
+		// Label primeiro ip para host
+		labelIpOneHost = new JLabel();
+		labelIpOneHost.setBounds(50, 135, 300, 30);
+		labelIpOneHost.setFont(new Font("Arial", Font.BOLD, 17));
+		labelIpOneHost.setVisible(false);
+
+		// Label ultimo ip para host
+		labelIplastHost = new JLabel();
+		labelIplastHost.setBounds(50, 165, 300, 30);
+		labelIplastHost.setFont(new Font("Arial", Font.BOLD, 17));
+		labelIplastHost.setVisible(false);
+		
+		//Label ip de brondcast
+		labelIpBroadcast = new JLabel();
+		labelIpBroadcast .setBounds(50, 195, 300, 30);
+		labelIpBroadcast.setFont(new Font("Arial", Font.BOLD, 17));
+		labelIpBroadcast.setVisible(false);
+		
+
 		labelBinario = new JLabel();
-		labelBinario.setFont(new Font("Arial", Font.BOLD, 14));
-		labelBinario.setBounds(50, 130, 500, 30);
+		labelBinario.setFont(new Font("Arial", Font.BOLD, 16));
+		labelBinario.setBounds(50, 225, 500, 30);
 		labelBinario.setVisible(false);
 
 		labelDecimal = new JLabel();
-		labelDecimal.setFont(new Font("Arial", Font.BOLD, 15));
-		labelDecimal.setBounds(50, 160, 400, 30);
+		labelDecimal.setFont(new Font("Arial", Font.BOLD, 17));
+		labelDecimal.setBounds(50, 255, 400, 30);
 		labelDecimal.setVisible(false);
 
 		labelHost = new JLabel();
-		labelHost.setFont(new Font("Arial", Font.BOLD, 15));
-		labelHost.setBounds(50, 190, 400, 30);
+		labelHost.setFont(new Font("Arial", Font.BOLD, 17));
+		labelHost.setBounds(50, 285, 400, 30);
 		labelHost.setVisible(false);
 
 		// Ação do botão "Limpar"
@@ -97,11 +124,16 @@ public class TelaIp {
 				labelDecimal.setText("");
 				labelHost.setText("");
 				labelErro.setText("");
-				labelErro.setVisible(false);
-				labelClasseIp.setVisible(false);
-				labelBinario.setVisible(false);
-				labelDecimal.setVisible(false);
-				labelHost.setVisible(false);
+				labelIpBroadcast.setText("");
+				labelIplastHost.setText("");
+				labelIpOneHost.setText("");
+				labelIpRede.setText("");
+				
+//				labelErro.setVisible(false);
+//				labelClasseIp.setVisible(false);
+//				labelBinario.setVisible(false);
+//				labelDecimal.setVisible(false);
+//				labelHost.setVisible(false);
 			}
 		});
 
@@ -131,7 +163,20 @@ public class TelaIp {
 					} else {
 						labelClasseIp.setText("Classe do IP: " + addIP.getCp());
 						labelClasseIp.setForeground(Color.BLACK);
+						String rede = addIP.getIpRede();
+						String oneHost = addIP.getIpOneHost();
+						String lastHost = addIP.getIpLastHost();
+						String broadcast = addIP.getIpBroadcast();
+						labelIpRede.setText("IP de rede:" + rede);
+						labelIpOneHost.setText("Primeiro ip para host:" + oneHost);
+						labelIplastHost.setText("Último ip para host:"+ lastHost);
+						labelIpBroadcast.setText("IP de broadcast:"+ broadcast);
+						
+						labelIpBroadcast.setVisible(true);
+						labelIplastHost.setVisible(true);
+						labelIpOneHost.setVisible(true);
 						labelClasseIp.setVisible(true);
+						labelIpRede.setVisible(true);
 						labelErro.setVisible(false);
 
 					}
@@ -204,6 +249,10 @@ public class TelaIp {
 		container.add(labelBinario);
 		container.add(labelDecimal);
 		container.add(labelHost);
+		container.add(labelIpOneHost);
+		container.add(labelIpRede);
+		container.add(labelIpBroadcast);
+		container.add(labelIplastHost);
 
 		tela.setVisible(true);
 	}
