@@ -45,7 +45,7 @@ public class TelaIp {
 
 		// Campo de entrada do IP
 		labelIpAddress = new JLabel("INSIRA O IP");
-		labelIpAddress.setFont(new Font("Arial", Font.BOLD, 14));
+		labelIpAddress.setFont(new Font("Arial", Font.BOLD, 16));
 		labelIpAddress.setBounds(50, 10, 100, 20);
 
 		//Campo de entrada de ip
@@ -75,29 +75,29 @@ public class TelaIp {
 		labelClasseIp.setVisible(false);
 
 		// Label ip de rede
-		labelIpRede = new JLabel();
-		labelIpRede.setBounds(50, 105, 300, 30);
-		labelIpRede.setFont(new Font("Arial", Font.BOLD, 17));
-		labelIpRede.setVisible(false);
-
-		// Label primeiro ip para host
-		labelIpOneHost = new JLabel();
-		labelIpOneHost.setBounds(50, 135, 300, 30);
-		labelIpOneHost.setFont(new Font("Arial", Font.BOLD, 17));
-		labelIpOneHost.setVisible(false);
-
-		// Label ultimo ip para host
-		labelIplastHost = new JLabel();
-		labelIplastHost.setBounds(50, 165, 300, 30);
-		labelIplastHost.setFont(new Font("Arial", Font.BOLD, 17));
-		labelIplastHost.setVisible(false);
-		
-		//Label ip de brondcast
-		labelIpBroadcast = new JLabel();
-		labelIpBroadcast .setBounds(50, 195, 300, 30);
-		labelIpBroadcast.setFont(new Font("Arial", Font.BOLD, 17));
-		labelIpBroadcast.setVisible(false);
-		
+//		labelIpRede = new JLabel();
+//		labelIpRede.setBounds(50, 105, 300, 30);
+//		labelIpRede.setFont(new Font("Arial", Font.BOLD, 17));
+//		labelIpRede.setVisible(false);
+//
+//		// Label primeiro ip para host
+//		labelIpOneHost = new JLabel();
+//		labelIpOneHost.setBounds(50, 135, 300, 30);
+//		labelIpOneHost.setFont(new Font("Arial", Font.BOLD, 17));
+//		labelIpOneHost.setVisible(false);
+//
+//		// Label ultimo ip para host
+//		labelIplastHost = new JLabel();
+//		labelIplastHost.setBounds(50, 165, 300, 30);
+//		labelIplastHost.setFont(new Font("Arial", Font.BOLD, 17));
+//		labelIplastHost.setVisible(false);
+//		
+//		//Label ip de brondcast
+//		labelIpBroadcast = new JLabel();
+//		labelIpBroadcast .setBounds(50, 195, 300, 30);
+//		labelIpBroadcast.setFont(new Font("Arial", Font.BOLD, 17));
+//		labelIpBroadcast.setVisible(false);
+//		
 
 		labelBinario = new JLabel();
 		labelBinario.setFont(new Font("Arial", Font.BOLD, 16));
@@ -163,20 +163,20 @@ public class TelaIp {
 					} else {
 						labelClasseIp.setText("Classe do IP: " + addIP.getCp());
 						labelClasseIp.setForeground(Color.BLACK);
-						String rede = addIP.getIpRede();
-						String oneHost = addIP.getIpOneHost();
-						String lastHost = addIP.getIpLastHost();
-						String broadcast = addIP.getIpBroadcast();
-						labelIpRede.setText("IP de rede:" + rede);
-						labelIpOneHost.setText("Primeiro ip para host:" + oneHost);
-						labelIplastHost.setText("Último ip para host:"+ lastHost);
-						labelIpBroadcast.setText("IP de broadcast:"+ broadcast);
-						
-						labelIpBroadcast.setVisible(true);
-						labelIplastHost.setVisible(true);
-						labelIpOneHost.setVisible(true);
+//						String rede = addIP.getIpRede();
+//						String oneHost = addIP.getIpOneHost();
+//						String lastHost = addIP.getIpLastHost();
+//						String broadcast = addIP.getIpBroadcast();
+//						labelIpRede.setText("IP de rede:" + rede);
+//						labelIpOneHost.setText("Primeiro ip para host:" + oneHost);
+//						labelIplastHost.setText("Último ip para host:"+ lastHost);
+//						labelIpBroadcast.setText("IP de broadcast:"+ broadcast);
+//						
+//						labelIpBroadcast.setVisible(true);
+//						labelIplastHost.setVisible(true);
+//						labelIpOneHost.setVisible(true);
 						labelClasseIp.setVisible(true);
-						labelIpRede.setVisible(true);
+//						labelIpRede.setVisible(true);
 						labelErro.setVisible(false);
 
 					}
@@ -249,10 +249,10 @@ public class TelaIp {
 		container.add(labelBinario);
 		container.add(labelDecimal);
 		container.add(labelHost);
-		container.add(labelIpOneHost);
-		container.add(labelIpRede);
-		container.add(labelIpBroadcast);
-		container.add(labelIplastHost);
+//		container.add(labelIpOneHost);
+//		container.add(labelIpRede);
+//		container.add(labelIpBroadcast);
+//		container.add(labelIplastHost);
 
 		tela.setVisible(true);
 	}

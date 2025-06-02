@@ -103,15 +103,14 @@ public class ClassificarEnderecoIP {
 		// Criar uma variável ipInt que vai receber o vetor posição 0 e transformar em
 		// um int
 		int ipInt = Integer.parseInt(partes[0]);
-
-		ipRede = partes[0] + "." + partes[1] + "." + partes[2] + "." + "0";
-
-		ipOneHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "1";
-
-		ipLastHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "254";
-
-		ipBroadcast = partes[0] + "." + partes[1] + "." + partes[2] + "." + "255";
-
+		
+//			ipRede = partes[0] + "." + partes[1] + "." + partes[2] + "." + "0";
+//
+//			ipOneHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "1";
+//
+//			ipLastHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "254";
+//
+//			ipBroadcast = partes[0] + "." + partes[1] + "." + partes[2] + "." + "255";
 		// primeiroOcteto vai receber o ipInt
 		primeiroOcteto = ipInt;
 	}
