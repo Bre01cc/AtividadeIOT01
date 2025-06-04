@@ -12,10 +12,7 @@ public class ClassificarEnderecoIP {
 	private String mascaraBinario;
 	private double ipDisponiveis;
 	private String classeIp;
-	private String ipRede;
-	private String ipOneHost;
-	private String ipLastHost;
-	private String ipBroadcast;
+	private int subRede;
 
 	public String getCp() {
 		return classeIp;
@@ -71,20 +68,8 @@ public class ClassificarEnderecoIP {
 		return ipDisponiveis;
 	}
 
-	public String getIpRede() {
-		return ipRede;
-	}
-
-	public String getIpOneHost() {
-		return ipOneHost;
-	}
-
-	public String getIpLastHost() {
-		return ipLastHost;
-	}
-
-	public String getIpBroadcast() {
-		return ipBroadcast;
+	public int getIpRede() {
+		return subRede;
 	}
 
 	// Métodos
@@ -103,15 +88,7 @@ public class ClassificarEnderecoIP {
 		// Criar uma variável ipInt que vai receber o vetor posição 0 e transformar em
 		// um int
 		int ipInt = Integer.parseInt(partes[0]);
-		
-//			ipRede = partes[0] + "." + partes[1] + "." + partes[2] + "." + "0";
-//
-//			ipOneHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "1";
-//
-//			ipLastHost = partes[0] + "." + partes[1] + "." + partes[2] + "." + "254";
-//
-//			ipBroadcast = partes[0] + "." + partes[1] + "." + partes[2] + "." + "255";
-		// primeiroOcteto vai receber o ipInt
+
 		primeiroOcteto = ipInt;
 	}
 
@@ -239,4 +216,99 @@ public class ClassificarEnderecoIP {
 		ipDisponiveis = Math.pow(2, 32 - cidr) - 2;
 	}
 
-}
+	public void calculoDeSubRede() {
+		if (cidr == 8 || cidr == 16 || cidr == 24) {
+			subRede = 0;
+		} else {
+			if (classeIp.equals("A")) {
+				int bits = cidr - 8;
+				subRede = (int) Math.pow(2, bits);
+
+			} else if (classeIp.equals("B")) {
+				int bits = cidr - 16;
+				subRede = (int) Math.pow(2, bits);
+
+			} else if (classeIp.equals("C")) {
+				int bits = cidr - 24;
+
+				subRede = (int) Math.pow(2, bits);
+
+			}
+		}
+
+	}
+	public void exibirSubRedes() {
+		String ipSeparacao = ip.replace(',', '.');
+
+		// Divide a string do IP em partes, usando o ponto como delimitador
+		String[] partes = ipSeparacao.split("\\.");
+
+		// Obtém a última parte do vetor, que contém o CIDR (ex: "0/24")
+		String parteCidr = partes[3];
+
+		// Divide a parte do CIDR em duas partes, separadas por "/"
+		String[] partes1 = parteCidr.split("/");
+		
+		String octetoEstatico = partes[0]+"."+partes[1]+"."+partes[2];
+		String octetoVar = partes1[0];
+		int octetoVariado = Integer.parseInt(octetoVar);
+		int idDaRede = 0;
+		for (int i = 0; i < subRede; i++) {
+			idDaRede++;
+			int divisão = 256 / subRede;
+			if (i == 0) {
+				String redeIp = octetoEstatico + "." + "0";
+
+				// String.valueOf transforma numeros em string
+				String broadcast01 = String.valueOf(divisão - 1);
+				String broadcast = octetoEstatico + "." + broadcast01;
+				System.out.println("Id da Rede" + idDaRede);
+				System.out.println("ip de rede:" + redeIp);
+				System.out.println("ip de broadcast:" + broadcast);
+				System.out.println("===========================================================");
+			} else {
+				// Valor do brondcast vai ser definido ao multilicar valor da divisão(no caso
+				// seria 256 / pela quantidade de subredes)
+				// após multiplicar pegaria essse valor -1, assim obtendo o valor do brodcast
+				int valorBroadcast = divisão * idDaRede;
+				String broadcast = String.valueOf(valorBroadcast - 1);
+				String ipDeBroadcast = octetoEstatico + "." + broadcast;
+
+				// Ip de rede
+				// pegar o valor do loop para multiplicar com valor obtido através da divisão
+
+				int CalcularIpDaRede = i * divisão;
+				// octetoVariado variado tem valor 0 e somamos com o valorda multiplicação acima
+				int ipDeRede = octetoVariado + CalcularIpDaRede;
+				String stringIpDeRede = String.valueOf(ipDeRede);
+				String ipDeRedeCompleto = octetoEstatico + "." + ipDeRede;
+
+				// Primeiro e ultimo ip valido para host
+				int Intbroadcast = Integer.parseInt(broadcast);
+				// brondcast - 1 para saber o ultimo ip disponivel
+				String ultimoIpDisponivel = String.valueOf(Intbroadcast - 1);
+				// rede + 1 para saber o primeiro ip disponivel
+				String primeiroIpDisponivel = String.valueOf(ipDeRede + 1);
+
+				String ipOneHost = octetoEstatico + "." + primeiroIpDisponivel;
+				String ipLastHost = octetoEstatico + "." + ultimoIpDisponivel;
+
+				System.out.println("ID da Rede:" + idDaRede);
+				System.out.println("IP de rede:" + ipDeRedeCompleto);
+				System.out.println("Primeiro IP da rede:" + ipOneHost);
+				System.out.println("Ultimo Ip da rede:" + ipLastHost);
+				System.out.println("IP de broadcast:" + ipDeBroadcast);
+
+				System.out.println("===========================================================");
+			}
+
+		}
+
+	}
+			
+			
+			
+		
+		
+		
+	}
