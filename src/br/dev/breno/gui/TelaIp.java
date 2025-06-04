@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,7 +24,8 @@ public class TelaIp {
 	private String tituloDaTela;
 	private JButton buttonResultado;
 	private JButton buttonLimpar;
-	private JList  listIp;
+	private JList<String>  listIp;
+	private DefaultListModel<String> modeloSubRedes;
 	private JScrollPane scrollIp;
 	private JLabel labelClasseIp;
 	private JLabel labelBinario;
@@ -97,11 +99,11 @@ public class TelaIp {
 		labelSubRede.setVisible(false);
 		
 		
-		listIp = new JList ();
-		
-		scrollIp = new JScrollPane(listIp);
-		scrollIp.setBounds(30, 220, 450, 120);
-
+		modeloSubRedes = new DefaultListModel<>();
+        listIp = new JList<>(modeloSubRedes);
+        scrollIp = new JScrollPane(listIp);
+        scrollIp.setBounds(30, 220, 500, 120);
+        
 		// Ação do botão "Limpar"
 		buttonLimpar.addActionListener(new ActionListener() {
 			@Override
@@ -113,6 +115,8 @@ public class TelaIp {
 				labelHost.setText("");
 				labelErro.setText("");
 				labelSubRede.setText("");
+				 modeloSubRedes.clear();
+
 
 			}
 		});
@@ -193,6 +197,8 @@ public class TelaIp {
 							labelHost.setText("IPs disponíveis para host: " + df.format(host));
 							labelHost.setForeground(Color.BLACK);
 							labelHost.setVisible(true);
+							
+						
 						} else if (cidr >= 31) {
 							labelHost.setText("Ips para host indisponiveis");
 							labelHost.setForeground(Color.red);
@@ -208,6 +214,7 @@ public class TelaIp {
 					labelBinario.setVisible(false);
 					labelDecimal.setVisible(false);
 					labelHost.setVisible(false);
+					   modeloSubRedes.clear();
 				}
 			}
 		});

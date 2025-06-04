@@ -2,6 +2,8 @@ package br.dev.breno.model;
 
 import java.text.DecimalFormat;
 
+import javax.swing.DefaultListModel;
+
 public class ClassificarEnderecoIP {
 
 	// Atributos da Classe
@@ -237,7 +239,7 @@ public class ClassificarEnderecoIP {
 		}
 
 	}
-	public void exibirSubRedes() {
+	public void exibirSubRedes(DefaultListModel<String> modelo) {
 		String ipSeparacao = ip.replace(',', '.');
 
 		// Divide a string do IP em partes, usando o ponto como delimitador
