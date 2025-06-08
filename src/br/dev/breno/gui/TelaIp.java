@@ -24,7 +24,7 @@ public class TelaIp {
 	private String tituloDaTela;
 	private JButton buttonResultado;
 	private JButton buttonLimpar;
-	private JList<String>  listIp;
+	private JList<String> listIp;
 	private DefaultListModel<String> modeloSubRedes;
 	private JScrollPane scrollIp;
 	private JLabel labelClasseIp;
@@ -34,12 +34,14 @@ public class TelaIp {
 	private JLabel labelErro;
 	private JLabel labelSubRede;
 
-	public void CriarTelaIp(String tituloDaTela) {
-		this.tituloDaTela = tituloDaTela;
+	public TelaIp() {
+		CriarTelaIp();
+	}
+
+	public void CriarTelaIp() {
 
 		// Configuração da janela principal
-		JFrame tela = new JFrame();
-		tela.setTitle(this.tituloDaTela);
+		JFrame tela = new JFrame("Calculador de ip");
 		tela.setSize(570, 440);
 		tela.setResizable(false);
 		tela.setLayout(null);
@@ -68,7 +70,7 @@ public class TelaIp {
 		labelErro = new JLabel();
 		labelErro.setFont(new Font("Arial", Font.BOLD, 20));
 		labelErro.setForeground(Color.RED);
-		labelErro.setBounds(250, 100, 300, 30);
+		labelErro.setBounds(50, 100, 500, 30);
 		labelErro.setVisible(false);
 
 		// Labels de resultado
@@ -94,16 +96,17 @@ public class TelaIp {
 
 		// Label ip de rede
 		labelSubRede = new JLabel();
-		labelSubRede.setBounds(50, 195, 300, 30);
+		labelSubRede.setBounds(50, 190, 300, 30);
 		labelSubRede.setFont(new Font("Arial", Font.BOLD, 17));
 		labelSubRede.setVisible(false);
-		
+
+		// Lista de sub-redes
 		
 		modeloSubRedes = new DefaultListModel<>();
-        listIp = new JList<>(modeloSubRedes);
-        scrollIp = new JScrollPane(listIp);
-        scrollIp.setBounds(30, 220, 500, 120);
-        
+		listIp = new JList<>(modeloSubRedes);
+		scrollIp = new JScrollPane(listIp);
+		scrollIp.setBounds(30, 220, 500, 120);
+
 		// Ação do botão "Limpar"
 		buttonLimpar.addActionListener(new ActionListener() {
 			@Override
@@ -115,8 +118,7 @@ public class TelaIp {
 				labelHost.setText("");
 				labelErro.setText("");
 				labelSubRede.setText("");
-				 modeloSubRedes.clear();
-
+				modeloSubRedes.clear();
 
 			}
 		});
@@ -140,42 +142,24 @@ public class TelaIp {
 					int cidr = addIP.getCidr();
 					addIP.calculoDeSubRede();
 
-					if (primeiroOcteto < 1 || primeiroOcteto > 255) {
-						labelClasseIp.setText("Verifique se o valor do primeiro octeto é válido");
-						labelClasseIp.setForeground(Color.RED);
-						labelBinario.setVisible(false);
-						labelDecimal.setVisible(false);
-						labelHost.setVisible(false);
-						labelClasseIp.setVisible(true);
-					} else {
-						labelClasseIp.setText("Classe do IP: " + addIP.getCp());
+					// verificando se o primeiro octeto e cidr é valido
+					// & significa E, no caso só vai classificar se ambas as codições forem
+					// verdadeiras
+					if ((primeiroOcteto >= 1 && primeiroOcteto <= 254) && (cidr > 0 && cidr <= 32)) {
+						labelClasseIp.setText("Classe do IP: " + addIP.getClasseIP());
 						labelClasseIp.setForeground(Color.BLACK);
+						labelClasseIp.setVisible(true);
 						int rede = addIP.getIpRede();
 						labelSubRede.setText("Total de sub-redes:" + rede);
 						labelSubRede.setVisible(true);
-						labelClasseIp.setVisible(true);
-						labelErro.setVisible(false);
 
-					}
+						if ((cidr > 24 && cidr < 31) && (addIP.getClasseIP().equals("C"))) {
+							modeloSubRedes.clear();
+							modeloSubRedes = addIP.gerarListaSubRedes();
+							listIp.setModel(modeloSubRedes);
+						}
 
-					if (cidr <= 0) {
-						labelBinario.setText("Cidr está inválido");
-						labelBinario.setForeground(Color.RED);
-						labelBinario.setVisible(true);
-						labelDecimal.setVisible(false);
-						labelHost.setVisible(false);
-
-					}
-
-					else if (cidr > 32) {
-						labelBinario.setText("Cidr está inválido");
-						labelBinario.setForeground(Color.RED);
-						labelBinario.setVisible(true);
-						labelDecimal.setVisible(false);
-						labelHost.setVisible(false);
-
-					} else {
-						// Binário
+						// Binario
 						addIP.converterBinario(cidr);
 						String binario = addIP.getMascaraBinario();
 						labelBinario.setText("Máscara em binário: " + binario);
@@ -189,7 +173,7 @@ public class TelaIp {
 						labelDecimal.setForeground(Color.BLACK);
 						labelDecimal.setVisible(true);
 
-						// Hosts
+						// Host
 						if (cidr <= 30) {
 							addIP.IpHost(cidr);
 							Double host = addIP.getIpDisponiveis();
@@ -197,24 +181,36 @@ public class TelaIp {
 							labelHost.setText("IPs disponíveis para host: " + df.format(host));
 							labelHost.setForeground(Color.BLACK);
 							labelHost.setVisible(true);
-							
-						
+
 						} else if (cidr >= 31) {
 							labelHost.setText("Ips para host indisponiveis");
 							labelHost.setForeground(Color.red);
 							labelHost.setVisible(true);
 						}
 
+						labelErro.setVisible(false);
+//						} 
 					}
 
+					else {
+						labelClasseIp.setText("Verifique se o valor do cidr é válido");
+						labelClasseIp.setForeground(Color.RED);
+						labelBinario.setVisible(false);
+						labelDecimal.setVisible(false);
+						labelHost.setVisible(false);
+						labelClasseIp.setVisible(true);
+						labelSubRede.setVisible(false);
+
+					}
 				} catch (Exception erro) {
-					labelErro.setText("Erro");
+					labelErro.setText("Verifique se o IP foi digitado corretamente");
 					labelErro.setVisible(true);
 					labelClasseIp.setVisible(false);
 					labelBinario.setVisible(false);
 					labelDecimal.setVisible(false);
 					labelHost.setVisible(false);
-					   modeloSubRedes.clear();
+					labelSubRede.setVisible(false);
+					modeloSubRedes.clear();
 				}
 			}
 		});
@@ -231,8 +227,7 @@ public class TelaIp {
 		container.add(labelHost);
 		container.add(scrollIp);
 		container.add(labelSubRede);
-		
-		
+
 		tela.setVisible(true);
 	}
 }

@@ -21,8 +21,7 @@ public class Main {
 
 //		int numero= 1010;
 
-		TelaIp tela = new TelaIp();
-		tela.CriarTelaIp("IP");		
+		new TelaIp();
 //		
 //		String ip = "192.168.0.0/30";
 //
