@@ -101,9 +101,11 @@ public class TelaIp {
 		labelSubRede.setVisible(false);
 
 		// Lista de sub-redes
-		
+		// Criando um novo DefaultListModel com <> vazio, pois o tipo (String) já foi definido na declaração da variável modeloSubRedes. 
 		modeloSubRedes = new DefaultListModel<>();
+		// Criando um JList que recebe modeloSubRedes no construtor, ou seja, o componente será criado já com esse modelo de dados.
 		listIp = new JList<>(modeloSubRedes);
+		// Adicionando listIp em um JScrollPane para permitir rolagem caso o conteúdo fique grande.
 		scrollIp = new JScrollPane(listIp);
 		scrollIp.setBounds(30, 220, 500, 120);
 
@@ -154,11 +156,15 @@ public class TelaIp {
 						labelSubRede.setVisible(true);
 
 						if ((cidr > 24 && cidr < 31) && (addIP.getClasseIP().equals("C"))) {
+						  //Quando o botão for pressionado vai limpar a lista, pois, se tiver uma lista previamnte criada ela sera limpa e substituida por outra
 							modeloSubRedes.clear();
+							//ModeloSubRede está recebendo o gerarListaSubRedes, no caso armazenando esses
 							modeloSubRedes = addIP.gerarListaSubRedes();
 							listIp.setModel(modeloSubRedes);
 						}
-
+						if ((!addIP.getClasseIP().equals("C"))||(cidr<25)) {
+							modeloSubRedes.clear();
+						}
 						// Binario
 						addIP.converterBinario(cidr);
 						String binario = addIP.getMascaraBinario();

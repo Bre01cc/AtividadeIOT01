@@ -239,14 +239,16 @@ public class ClassificarEnderecoIP {
 		}
 
 	}
+	//DefaultListModel : modelo de lista padrão
+	//DefaultListModel: armazena dados que serão exibidos em um JList
 	// DefaultListModel<String> é usado para fazer uma lista dinâmica, que nessa
 	// situação é para armezenar String
 	// Ele permite adicionar, remover ou limpar elementos
 
 	public DefaultListModel<String> gerarListaSubRedes() {
 
-		
-		DefaultListModel<String> modelo = new DefaultListModel<>();
+		//<String> isso indica o tipo de dado vai ser armazenado
+		DefaultListModel<String> dadosDaSubRede = new DefaultListModel<>();
 		String ipSeparacao = ip.replace(',', '.');
 
 		// Divide a string do IP em partes, usando o ponto como delimitador
@@ -292,16 +294,16 @@ public class ClassificarEnderecoIP {
 			String ipOneHost = octetoEstatico + "." + primeiroIpDisponivel;
 			String ipLastHost = octetoEstatico + "." + ultimoIpDisponivel;
 
-			//o modelo 
-			modelo.addElement("ID da Rede:" + idDaRede);
-			modelo.addElement("IP de rede: " + ipDeRedeCompleto);
-			modelo.addElement("Primeiro IP da rede: " + ipOneHost);
-			modelo.addElement("Último IP da rede: " + ipLastHost);
-			modelo.addElement("IP de broadcast: " + ipDeBroadcast);
-			modelo.addElement("==============================================");
+			//modelo.addElement: adiciona  um item que eventualmente será exibido na interface gráfica
+			dadosDaSubRede.addElement("ID da Rede:" + idDaRede);
+			dadosDaSubRede.addElement("IP de rede: " + ipDeRedeCompleto);
+			dadosDaSubRede.addElement("Primeiro IP da rede: " + ipOneHost);
+			dadosDaSubRede.addElement("Último IP da rede: " + ipLastHost);
+			dadosDaSubRede.addElement("IP de broadcast: " + ipDeBroadcast);
+			dadosDaSubRede.addElement("==============================================");
 
 		}
-		return modelo;
+		return dadosDaSubRede;
 
 	}
 
