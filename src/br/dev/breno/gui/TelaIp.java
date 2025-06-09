@@ -40,7 +40,7 @@ public class TelaIp {
 
 	public void CriarTelaIp() {
 
-		// Configuração da janela principal
+		// Configuração da janela principal da aplicação
 		JFrame tela = new JFrame("Calculador de ip");
 		tela.setSize(570, 440);
 		tela.setResizable(false);
@@ -48,32 +48,32 @@ public class TelaIp {
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container container = tela.getContentPane();
 
-		// Campo de entrada do IP
+		// Label para indicar o campo de entrada do IP
 		labelIpAddress = new JLabel("INSIRA O IP");
 		labelIpAddress.setFont(new Font("Arial", Font.BOLD, 16));
 		labelIpAddress.setBounds(50, 10, 100, 20);
 
-		// Campo de entrada de ip
+		// Campo de texto para o usuário digitar o IP com máscara CIDR
 		textIpAddres = new JTextField();
 		textIpAddres.setFont(new Font("Arial", Font.BOLD, 15));
 		textIpAddres.setBounds(50, 30, 400, 30);
 
-		// Botão "Exibir"
+		// Botão que, ao ser clicado, executa o cálculo e exibe os resultados
 		buttonResultado = new JButton("Exibir");
 		buttonResultado.setBounds(80, 350, 160, 35);
 
-		// Botão "Limpar"
+		// Botão para limpar os campos e resultados exibidos
 		buttonLimpar = new JButton("Limpar");
 		buttonLimpar.setBounds(260, 350, 160, 35);
 
-		// Mensagem de erro
+		// Label para exibir mensagens de erro ao usuário
 		labelErro = new JLabel();
 		labelErro.setFont(new Font("Arial", Font.BOLD, 20));
 		labelErro.setForeground(Color.RED);
 		labelErro.setBounds(50, 100, 500, 30);
 		labelErro.setVisible(false);
 
-		// Labels de resultado
+		// Labels que exibem os resultados do cálculo de IP e máscara
 		labelClasseIp = new JLabel();
 		labelClasseIp.setFont(new Font("Arial", Font.BOLD, 17));
 		labelClasseIp.setBounds(50, 75, 400, 30);
@@ -94,22 +94,19 @@ public class TelaIp {
 		labelHost.setBounds(50, 165, 400, 30);
 		labelHost.setVisible(false);
 
-		// Label ip de rede
+		// Label para mostrar o total de sub-redes calculadas
 		labelSubRede = new JLabel();
 		labelSubRede.setBounds(50, 190, 300, 30);
 		labelSubRede.setFont(new Font("Arial", Font.BOLD, 17));
 		labelSubRede.setVisible(false);
 
-		// Lista de sub-redes
-		// Criando um novo DefaultListModel com <> vazio, pois o tipo (String) já foi definido na declaração da variável modeloSubRedes. 
+		// Modelo e lista para exibir as sub-redes geradas (quando aplicável)
 		modeloSubRedes = new DefaultListModel<>();
-		// Criando um JList que recebe modeloSubRedes no construtor, ou seja, o componente será criado já com esse modelo de dados.
 		listIp = new JList<>(modeloSubRedes);
-		// Adicionando listIp em um JScrollPane para permitir rolagem caso o conteúdo fique grande.
 		scrollIp = new JScrollPane(listIp);
 		scrollIp.setBounds(30, 220, 500, 120);
 
-		// Ação do botão "Limpar"
+		// Evento do botão "Limpar" que reseta todos os campos e resultados na tela
 		buttonLimpar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -122,10 +119,17 @@ public class TelaIp {
 				labelSubRede.setText("");
 				modeloSubRedes.clear();
 
+				// Esconde os labels de resultado e erro
+				labelClasseIp.setVisible(false);
+				labelBinario.setVisible(false);
+				labelDecimal.setVisible(false);
+				labelHost.setVisible(false);
+				labelErro.setVisible(false);
+				labelSubRede.setVisible(false);
 			}
 		});
 
-		// Ação do botão "Exibir"
+		// Evento do botão "Exibir" que realiza a análise do IP e atualiza a interface
 		buttonResultado.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -136,50 +140,55 @@ public class TelaIp {
 					addIP.setIp(caixaText);
 					String ip = addIP.getIp();
 
+					// Extrai e classifica o IP pelo primeiro octeto
 					addIP.SeparadorDeIPClasse(ip);
 					int primeiroOcteto = addIP.getPrimeiroOcteto();
 					addIP.classificarIp(primeiroOcteto);
 
+					// Extrai o CIDR e calcula as sub-redes
 					addIP.SeparaIPCidr(ip);
 					int cidr = addIP.getCidr();
 					addIP.calculoDeSubRede();
 
-					// verificando se o primeiro octeto e cidr é valido
-					// & significa E, no caso só vai classificar se ambas as codições forem
-					// verdadeiras
+					// Verifica se o primeiro octeto e o CIDR são válidos antes de mostrar resultados
 					if ((primeiroOcteto >= 1 && primeiroOcteto <= 254) && (cidr > 0 && cidr <= 32)) {
+						// Exibe a classe do IP
 						labelClasseIp.setText("Classe do IP: " + addIP.getClasseIP());
 						labelClasseIp.setForeground(Color.BLACK);
 						labelClasseIp.setVisible(true);
+
+						// Exibe o total de sub-redes calculadas
 						int rede = addIP.getIpRede();
-						labelSubRede.setText("Total de sub-redes:" + rede);
+						labelSubRede.setText("Total de sub-redes: " + rede);
 						labelSubRede.setVisible(true);
 
+						// Caso IP classe C e máscara entre /25 e /30, exibe lista de sub-redes
 						if ((cidr > 24 && cidr < 31) && (addIP.getClasseIP().equals("C"))) {
-						  //Quando o botão for pressionado vai limpar a lista, pois, se tiver uma lista previamnte criada ela sera limpa e substituida por outra
 							modeloSubRedes.clear();
-							//ModeloSubRede está recebendo o gerarListaSubRedes, no caso armazenando esses
 							modeloSubRedes = addIP.gerarListaSubRedes();
 							listIp.setModel(modeloSubRedes);
 						}
-						if ((!addIP.getClasseIP().equals("C"))||(cidr<25)) {
+
+						// Se não for classe C ou máscara for menor que /25, limpa a lista de sub-redes
+						if ((!addIP.getClasseIP().equals("C")) || (cidr < 25)) {
 							modeloSubRedes.clear();
 						}
-						// Binario
+
+						// Converte e exibe a máscara em binário
 						addIP.converterBinario(cidr);
 						String binario = addIP.getMascaraBinario();
 						labelBinario.setText("Máscara em binário: " + binario);
 						labelBinario.setForeground(Color.BLACK);
 						labelBinario.setVisible(true);
 
-						// Decimal
+						// Converte e exibe a máscara em decimal
 						addIP.converterCidrDecimal(binario);
 						String decimal = addIP.getMascaraDecimal();
 						labelDecimal.setText("Máscara decimal: " + decimal);
 						labelDecimal.setForeground(Color.BLACK);
 						labelDecimal.setVisible(true);
 
-						// Host
+						// Calcula e exibe o número de IPs disponíveis para host (quando aplicável)
 						if (cidr <= 30) {
 							addIP.IpHost(cidr);
 							Double host = addIP.getIpDisponiveis();
@@ -189,39 +198,43 @@ public class TelaIp {
 							labelHost.setVisible(true);
 
 						} else if (cidr >= 31) {
-							labelHost.setText("Ips para host indisponiveis");
-							labelHost.setForeground(Color.red);
+							labelHost.setText("IPs para host indisponíveis");
+							labelHost.setForeground(Color.RED);
 							labelHost.setVisible(true);
 						}
 
+						// Esconde a mensagem de erro
 						labelErro.setVisible(false);
-//						} 
-					}
 
-					else {
-						labelClasseIp.setText("Verifique se o valor do cidr é válido");
+					} else {
+						// Mensagem para indicar que o CIDR ou o primeiro octeto são inválidos
+						labelClasseIp.setText("Verifique se o valor do CIDR é válido");
 						labelClasseIp.setForeground(Color.RED);
 						labelBinario.setVisible(false);
 						labelDecimal.setVisible(false);
 						labelHost.setVisible(false);
 						labelClasseIp.setVisible(true);
 						labelSubRede.setVisible(false);
-
+						modeloSubRedes.clear();
 					}
 				} catch (Exception erro) {
+					// Exibe mensagem de erro caso o IP seja inválido ou ocorra exceção
 					labelErro.setText("Verifique se o IP foi digitado corretamente");
 					labelErro.setVisible(true);
+
+					// Esconde os labels de resultado
 					labelClasseIp.setVisible(false);
 					labelBinario.setVisible(false);
 					labelDecimal.setVisible(false);
 					labelHost.setVisible(false);
 					labelSubRede.setVisible(false);
+
 					modeloSubRedes.clear();
 				}
 			}
 		});
 
-		// Adicionando componentes ao container
+		// Adiciona todos os componentes configurados ao container da janela
 		container.add(labelIpAddress);
 		container.add(textIpAddres);
 		container.add(buttonResultado);
@@ -234,6 +247,7 @@ public class TelaIp {
 		container.add(scrollIp);
 		container.add(labelSubRede);
 
+		// Exibe a janela principal
 		tela.setVisible(true);
 	}
 }

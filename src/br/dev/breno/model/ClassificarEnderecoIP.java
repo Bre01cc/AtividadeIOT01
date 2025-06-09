@@ -17,294 +17,233 @@ public class ClassificarEnderecoIP {
 	private int subRede;
 
 	public String getClasseIP() {
-		return classeIp;
+	    return classeIp;
 	}
 
 	// Getters e Setters
 	public String getIp() {
-		return ip;
+	    return ip;
 	}
 
 	public void setIp(String ip) {
-		this.ip = ip;
+	    this.ip = ip;
 	}
 
 	// Primeiro Octeto
 	public int getPrimeiroOcteto() {
-		return primeiroOcteto;
+	    return primeiroOcteto;
 	}
 
 	public void setPrimeiroOcteto(int primeiroOcteto) {
-		this.primeiroOcteto = primeiroOcteto;
+	    this.primeiroOcteto = primeiroOcteto;
 	}
 
 	// CIDR
 	public int getCidr() {
-		return cidr;
+	    return cidr;
 	}
 
 	public void setCidr(int cidr) {
-		this.cidr = cidr;
+	    this.cidr = cidr;
 	}
 
 	// Máscara Decimal
 	public String getMascaraDecimal() {
-		return mascaraDecimal;
+	    return mascaraDecimal;
 	}
 
 	public void setMascaraDecimal(String mascaraDecimal) {
-		this.mascaraDecimal = mascaraDecimal;
+	    this.mascaraDecimal = mascaraDecimal;
 	}
 
 	// Máscara Binária
 	public String getMascaraBinario() {
-		return mascaraBinario;
+	    return mascaraBinario;
 	}
 
 	public void setMascaraBinario(String mascaraBinario) {
-		this.mascaraBinario = mascaraBinario;
+	    this.mascaraBinario = mascaraBinario;
 	}
 
 	// IPs Disponíveis
 	public double getIpDisponiveis() {
-		return ipDisponiveis;
+	    return ipDisponiveis;
 	}
 
 	public int getIpRede() {
-		return subRede;
+	    return subRede;
 	}
 
 	// Métodos
 
-	// Separar o IP
+	// Método para separar o IP e extrair o primeiro octeto
+	// Recebe o IP como String e substitui vírgulas por pontos para padronizar
+	// Depois divide o IP em partes, usando o ponto como separador
+	// O primeiro octeto é convertido para inteiro e armazenado para classificação futura
 	public void SeparadorDeIPClasse(String ip) {
-
-		// Pegar o IP e substituir as vírgulas por ponto
-		String ipSeparacao = ip.replace(',', '.');
-
-		// Vetor vai receber o IP e separar ele de acordo com os pontos
-		// (No caso, o split vai quebrar a String de acordo com os parâmetros que
-		// inserimos dentro dos parênteses)
-		String[] partes = ipSeparacao.split("\\.");
-
-		// Criar uma variável ipInt que vai receber o vetor posição 0 e transformar em
-		// um int
-		int ipInt = Integer.parseInt(partes[0]);
-
-		primeiroOcteto = ipInt;
+	    String ipSeparacao = ip.replace(',', '.');
+	    String[] partes = ipSeparacao.split("\\.");
+	    int ipInt = Integer.parseInt(partes[0]);
+	    primeiroOcteto = ipInt;
 	}
 
+	// Método para extrair o valor do CIDR do IP
+	// Substitui vírgulas por pontos e divide o IP em partes
+	// Pega a última parte, que contém o último octeto e o CIDR, no formato "x/yy"
+	// Divide essa parte para separar o último octeto do CIDR
+	// Remove tudo que não for número no CIDR, e converte para inteiro
+	// Armazena o valor do CIDR para uso futuro
 	public void SeparaIPCidr(String ip) {
-		// Substitui vírgulas por pontos no IP, se necessário
-		String ipSeparacao = ip.replace(',', '.');
-
-		// Divide a string do IP em partes, usando o ponto como delimitador
-		String[] partes = ipSeparacao.split("\\.");
-
-		// Obtém a última parte do vetor, que contém o CIDR (ex: "0/24")
-		String parteCidr = partes[3];
-
-		// Divide a parte do CIDR em duas partes, separadas por "/"
-		String[] partes1 = parteCidr.split("/");
-
-		// Extrai a parte numérica do CIDR (ex: "24") e converte para inteiro
-		// O replaceAll remove tudo que não for dígito
-		int cirPartesInt = Integer.parseInt(partes1[1].replaceAll("[^\\d]", ""));
-
-		// Por fim, cidr vai receber esse número
-		cidr = cirPartesInt;
+	    String ipSeparacao = ip.replace(',', '.');
+	    String[] partes = ipSeparacao.split("\\.");
+	    String parteCidr = partes[3];
+	    String[] partes1 = parteCidr.split("/");
+	    int cirPartesInt = Integer.parseInt(partes1[1].replaceAll("[^\\d]", ""));
+	    cidr = cirPartesInt;
 	}
 
-	// Classificar o IP com base no valor do primeiro octeto utilizando if e else if
+	// Classifica o IP com base no primeiro octeto, usando estruturas condicionais
+	// Define a classe do IP conforme a faixa em que o primeiro octeto se encontra
+	// Caso o valor não se encaixe nas faixas esperadas, imprime "Inválido"
 	public String classificarIp(int primeiroOcteto) {
-		if (primeiroOcteto >= 1 && primeiroOcteto <= 126) {
-			classeIp = "A";
-		} else if (primeiroOcteto >= 127 && primeiroOcteto <= 191) {
-			classeIp = "B";
-		} else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
-			classeIp = "C";
-		} else if (primeiroOcteto >= 224 && primeiroOcteto <= 239) {
-			classeIp = "D";
-		} else {
-			System.out.println("Inválido");
-		}
-		return classeIp;
+	    if (primeiroOcteto >= 1 && primeiroOcteto <= 126) {
+	        classeIp = "A";
+	    } else if (primeiroOcteto >= 127 && primeiroOcteto <= 191) {
+	        classeIp = "B";
+	    } else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
+	        classeIp = "C";
+	    } else if (primeiroOcteto >= 224 && primeiroOcteto <= 239) {
+	        classeIp = "D";
+	    } else {
+	        System.out.println("Inválido");
+	    }
+	    return classeIp;
 	}
 
-	// Convertendo para Binário
+	// Converte o valor do CIDR para uma máscara binária no formato "11111111.11111111.11111111.00000000"
+	// Usamos StringBuilder porque ele é eficiente para construir strings mutáveis
+	// O loop percorre 32 bits (tamanho do IPv4) e adiciona '1' para os bits correspondentes ao CIDR
+	// e '0' para os bits restantes
+	// Para facilitar a leitura, um ponto '.' é inserido a cada 8 bits, separando os octetos
 	public void converterBinario(int cidr) {
-		StringBuilder binario = new StringBuilder();
-		// StringBuilder é usado por diversas razões, por conta de ser
-		// mutável (consegue-se modificá-lo de diversas formas)
-		// e acaba sendo melhor de ser usado nessa situação.
-		for (int i = 0; i < 32; i++) {
-			// For é usado quando você sabe exatamente a quantidade de vezes que um loop
-			// deve ocorrer. O loop do for não depende de condições externas para acontecer
-			// como o while.
-			// No caso, o loop nessa situação deve ocorrer enquanto i for menor que 32,
-			// que é a quantidade de bits no IPv4.
+	    StringBuilder binario = new StringBuilder();
 
-			// Criando uma condição em que, enquanto i for menor que o CIDR, seu valor será
-			// substituído por 1
-			if (i < cidr)
-				// append está substituindo o valor por 1
-				binario.append('1');
-			else
-				// E o restante será substituído por 0
-				binario.append('0');
+	    for (int i = 0; i < 32; i++) {
+	        if (i < cidr)
+	            binario.append('1');  // Para os primeiros 'cidr' bits, adiciona 1
+	        else
+	            binario.append('0');  // Para os bits restantes, adiciona 0
 
-			// No if estão ocorrendo duas verificações em relação ao valor de i
-			// % 8 == 0 garante que i seja divisível por 8 (resto 0)
-			// ((i + 1) garante que seja o final de cada octeto (0-7, 8-15, etc.)
-			// Esse processo vai ocorrer com os demais octetos
-			// Formatação do binário: para cada grupo de 8 bits adicionar um ponto
-			// i < 31 evita adicionar ponto ao final
-			if ((i + 1) % 8 == 0 && i < 31) {
-				// Após essa verificação ser verdadeira, o ponto será inserido
-				binario.append('.');
-			}
-		}
-		// Convertendo a variável binário para uma String
-		mascaraBinario = binario.toString();
+	        // A cada 8 bits (exceto no final), adiciona um ponto para separar os octetos
+	        if ((i + 1) % 8 == 0 && i < 31) {
+	            binario.append('.');
+	        }
+	    }
+
+	    // Converte o StringBuilder para String e armazena na variável mascaraBinario
+	    mascaraBinario = binario.toString();
 	}
 
-	// Converter Máscara Decimal
+	// Converte a máscara binária em máscara decimal, para facilitar a visualização
+	// Remove os pontos da máscara binária para formar uma string contínua de bits
+	// Divide essa string em 4 octetos de 8 bits cada
+	// Cada octeto binário é convertido para decimal usando Integer.parseInt com base 2
+	// Os octetos decimais são concatenados em formato decimal com pontos entre eles
+	// O resultado é armazenado em mascaraDecimal
 	public void converterCidrDecimal(String binario) {
-		StringBuilder decimal = new StringBuilder();
+	    StringBuilder decimal = new StringBuilder();
+	    String binarioPontos = mascaraBinario.replace(".", "");
 
-		// Removendo os pontos da máscara binária
-		String binarioPontos = mascaraBinario.replace(".", "");
+	    for (int i = 0; i < 4; i++) {
+	        String octetoDecimal = binarioPontos.substring(i * 8, (i + 1) * 8);
+	        decimal.append(Integer.parseInt(octetoDecimal, 2));
 
-		// Um loop que percorre os 4 octetos
-		for (int i = 0; i < 4; i++) {
+	        if (i < 3)
+	            decimal.append(".");
+	    }
 
-			// Criando uma variável que vai receber a máscara binária sem a separação por
-			// pontos
-			// substring é método para extrair uma parte da String
-			// No substring estão sendo passados os parâmetros de início e fim
-			if (i == 0) {
-				String octetoDecimal = binarioPontos.substring(0, 8);
-				// Objetivo desse trecho é transformar octeto binário para decimal.
-				// A base de um sistema numérico indica quantos dígitos diferentes ele pode
-				// usar (usaremos a base do binário).
-				// 2 é base, pois em binário é usado apenas os números 0 e 1.
-				// No caso, o número extraído pelo octetoDecimal está sendo convertido para
-				// decimal, pela base 2 (binário).
-				// Integer.parseInt converte uma String para int (número inteiro) ou converte
-				// uma
-				// string de qualquer base para decimal, que nesse caso a base é 2
-				decimal.append(Integer.parseInt(octetoDecimal, 2));
-			} else if (i == 1) {
-				String octetoDecimal = binarioPontos.substring(8, 16);
-				decimal.append(Integer.parseInt(octetoDecimal, 2));
-			} else if (i == 2) {
-				String octetoDecimal = binarioPontos.substring(16, 24);
-				decimal.append(Integer.parseInt(octetoDecimal, 2));
-			} else if (i == 3) {
-				String octetoDecimal = binarioPontos.substring(24, 32);
-				decimal.append(Integer.parseInt(octetoDecimal, 2));
-			}
-
-			// Adicionar ponto 3 vezes
-			if (i < 3)
-				decimal.append(".");
-		}
-
-		mascaraDecimal = decimal.toString();
+	    mascaraDecimal = decimal.toString();
 	}
 
+	// Calcula o número de IPs disponíveis para hosts com base no CIDR
+	// Faz o cálculo 2^(32 - cidr) - 2 para excluir o endereço de rede e broadcast
+	// O resultado é armazenado em ipDisponiveis
 	public void IpHost(int cidr) {
-		// Cálculo para IPs disponíveis para hosts
-		ipDisponiveis = Math.pow(2, 32 - cidr) - 2;
+	    ipDisponiveis = Math.pow(2, 32 - cidr) - 2;
 	}
 
+	// Calcula o número de subredes baseado na classe do IP e no CIDR
+	// Para os valores padrão de CIDR 8, 16 e 24, subrede é 0, pois não há subdivisão
+	// Caso contrário, calcula a quantidade de bits usados para subredes, 
+	// subtraindo o padrão da classe (8,16,24) do CIDR e elevando 2 a essa potência
+	// O resultado indica quantas subredes foram criadas e é armazenado em subRede
 	public void calculoDeSubRede() {
-		if (cidr == 8 || cidr == 16 || cidr == 24) {
-			subRede = 0;
-		} else {
-			if (classeIp.equals("A")) {
-				int bits = cidr - 8;
-				subRede = (int) Math.pow(2, bits);
-
-			} else if (classeIp.equals("B")) {
-				int bits = cidr - 16;
-				subRede = (int) Math.pow(2, bits);
-
-			} else if (classeIp.equals("C")) {
-				int bits = cidr - 24;
-
-				subRede = (int) Math.pow(2, bits);
-
-			}
-		}
-
+	    if (cidr == 8 || cidr == 16 || cidr == 24) {
+	        subRede = 0;
+	    } else {
+	        if (classeIp.equals("A")) {
+	            int bits = cidr - 8;
+	            subRede = (int) Math.pow(2, bits);
+	        } else if (classeIp.equals("B")) {
+	            int bits = cidr - 16;
+	            subRede = (int) Math.pow(2, bits);
+	        } else if (classeIp.equals("C")) {
+	            int bits = cidr - 24;
+	            subRede = (int) Math.pow(2, bits);
+	        }
+	    }
 	}
-	//DefaultListModel : modelo de lista padrão
-	//DefaultListModel: armazena dados que serão exibidos em um JList
-	// DefaultListModel<String> é usado para fazer uma lista dinâmica, que nessa
-	// situação é para armezenar String
-	// Ele permite adicionar, remover ou limpar elementos
 
+	// Gera uma lista dinâmica de informações das subredes para exibir na interface gráfica
+	// Usa DefaultListModel para armazenar strings que representam cada subrede
+	// A string do IP é separada para extrair os octetos fixos e o último que será variado
+	// Calcula o tamanho de cada subrede dividindo 256 pelo número de subredes
+	// Para cada subrede, calcula o IP de rede, primeiro IP válido, último IP válido e broadcast
+	// Adiciona essas informações no modelo que será exibido para o usuário
 	public DefaultListModel<String> gerarListaSubRedes() {
+	    DefaultListModel<String> dadosDaSubRede = new DefaultListModel<>();
+	    String ipSeparacao = ip.replace(',', '.');
+	    String[] partes = ipSeparacao.split("\\.");
+	    String parteCidr = partes[3];
+	    String[] partes1 = parteCidr.split("/");
 
-		//<String> isso indica o tipo de dado vai ser armazenado
-		DefaultListModel<String> dadosDaSubRede = new DefaultListModel<>();
-		String ipSeparacao = ip.replace(',', '.');
+	    String octetoEstatico = partes[0] + "." + partes[1] + "." + partes[2];
+	    String octetoVar = partes1[0];
+	    int octetoVariado = Integer.parseInt(octetoVar);
+	    octetoVariado = 0;
+	    int idDaRede = 0;
 
-		// Divide a string do IP em partes, usando o ponto como delimitador
-		String[] partes = ipSeparacao.split("\\.");
+	    // Loop para criar informações para cada subrede
+	    for (int i = 0; i < subRede; i++) {
+	        idDaRede++;
+	        int divisao = 256 / subRede;
 
-		// Obtém a última parte do vetor, que contém o CIDR (ex: "0/24")
-		String parteCidr = partes[3];
+	        // Calcula o valor do broadcast como múltiplo da divisão - 1
+	        int valorBroadcast = divisao * idDaRede;
+	        String broadcast = String.valueOf(valorBroadcast - 1);
+	        String ipDeBroadcast = octetoEstatico + "." + broadcast;
 
-		// Divide a parte do CIDR em duas partes, separadas por "/"
-		String[] partes1 = parteCidr.split("/");
+	        // Calcula o IP de rede multiplicando o índice do loop pela divisão e somando ao octeto variável
+	        int calcularIpDaRede = i * divisao;
+	        int ipDeRede = octetoVariado + calcularIpDaRede;
+	        String ipDeRedeCompleto = octetoEstatico + "." + ipDeRede;
 
-		String octetoEstatico = partes[0] + "." + partes[1] + "." + partes[2];
-		String octetoVar = partes1[0];
-		int octetoVariado = Integer.parseInt(octetoVar);
-		int idDaRede = 0;
-		for (int i = 0; i < subRede; i++) {
-			idDaRede++;
-			int divisão = 256 / subRede;
+	        // Calcula o primeiro IP válido e o último IP válido da subrede
+	        int intBroadcast = Integer.parseInt(broadcast);
+	        String ultimoIpDisponivel = String.valueOf(intBroadcast - 1);
+	        String primeiroIpDisponivel = String.valueOf(ipDeRede + 1);
+	        String ipOneHost = octetoEstatico + "." + primeiroIpDisponivel;
+	        String ipLastHost = octetoEstatico + "." + ultimoIpDisponivel;
 
-			// Valor do brondcast vai ser definido ao multilicar valor da divisão(no caso
-			// seria 256 / pela quantidade de subredes)
-			// após multiplicar pegaria essse valor -1, assim obtendo o valor do brodcast
-			int valorBroadcast = divisão * idDaRede;
-			String broadcast = String.valueOf(valorBroadcast - 1);
-			String ipDeBroadcast = octetoEstatico + "." + broadcast;
+	        // Adiciona as informações da subrede no modelo para exibição
+	        dadosDaSubRede.addElement("ID da Rede:" + idDaRede);
+	        dadosDaSubRede.addElement("IP de rede: " + ipDeRedeCompleto);
+	        dadosDaSubRede.addElement("Primeiro IP da rede: " + ipOneHost);
+	        dadosDaSubRede.addElement("Último IP da rede: " + ipLastHost);
+	        dadosDaSubRede.addElement("IP de broadcast: " + ipDeBroadcast);
+	        dadosDaSubRede.addElement("==============================================");
+	    }
 
-			// Ip de rede
-			// pegar o valor do loop para multiplicar com valor obtido através da divisão
-
-			int CalcularIpDaRede = i * divisão;
-			// octetoVariado variado tem valor 0 e somamos com o valorda multiplicação acima
-			int ipDeRede = octetoVariado + CalcularIpDaRede;
-			String stringIpDeRede = String.valueOf(ipDeRede);
-			String ipDeRedeCompleto = octetoEstatico + "." + ipDeRede;
-
-			// Primeiro e ultimo ip valido para host
-			int Intbroadcast = Integer.parseInt(broadcast);
-			// brondcast - 1 para saber o ultimo ip disponivel
-			String ultimoIpDisponivel = String.valueOf(Intbroadcast - 1);
-			// rede + 1 para saber o primeiro ip disponivel
-			String primeiroIpDisponivel = String.valueOf(ipDeRede + 1);
-
-			String ipOneHost = octetoEstatico + "." + primeiroIpDisponivel;
-			String ipLastHost = octetoEstatico + "." + ultimoIpDisponivel;
-
-			//modelo.addElement: adiciona  um item que eventualmente será exibido na interface gráfica
-			dadosDaSubRede.addElement("ID da Rede:" + idDaRede);
-			dadosDaSubRede.addElement("IP de rede: " + ipDeRedeCompleto);
-			dadosDaSubRede.addElement("Primeiro IP da rede: " + ipOneHost);
-			dadosDaSubRede.addElement("Último IP da rede: " + ipLastHost);
-			dadosDaSubRede.addElement("IP de broadcast: " + ipDeBroadcast);
-			dadosDaSubRede.addElement("==============================================");
-
-		}
-		return dadosDaSubRede;
-
+	    return dadosDaSubRede;
 	}
-
 }
