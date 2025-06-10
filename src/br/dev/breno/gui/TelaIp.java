@@ -170,7 +170,7 @@ public class TelaIp {
 						}
 
 						// Se não for classe C ou máscara for menor que /25, limpa a lista de sub-redes
-						if ((!addIP.getClasseIP().equals("C")) || (cidr < 25)) {
+						if ((!addIP.getClasseIP().equals("C")) || (cidr < 25|| cidr >30)) {
 							modeloSubRedes.clear();
 						}
 
