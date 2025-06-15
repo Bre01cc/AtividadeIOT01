@@ -1,6 +1,6 @@
 ## Sobre o Projeto:
 
-- Este projeto foi desenvolvido como uma forma de testar e aprimorar meus conhecimentos em lógica de programação e arquitetura de redes, com uma aplicação prática relacionada ao estudo de endereçamento IP e CIDR.
+Este projeto foi desenvolvido como uma forma de testar e aprimorar meus conhecimentos em lógica de programação e arquitetura de redes, com uma aplicação prática relacionada ao estudo de endereçamento IP e CIDR.
 
 O sistema recebe como entrada um endereço IP juntamente com a máscara no formato CIDR e, a partir desses dados, realiza cálculos e exibições importantes para o entendimento da estrutura de redes. Entre as funcionalidades principais, o projeto apresenta:
 
